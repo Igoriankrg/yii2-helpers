@@ -3,40 +3,10 @@
 namespace yii2lab\helpers;
 
 use Yii;
-use yii2lab\helper\yii\ArrayHelper;
-use yii2lab\helper\yii\FileHelper;
+use yii2lab\helpers\yii\ArrayHelper;
+use yii2lab\helpers\yii\FileHelper;
 
 class Helper {
-
-	function buildNavbarMenu($items) {
-		$result = [];
-		foreach($items as $module) {
-			if(config('modules.' . $module['name'])) {
-				if(!empty($module['access'])) {
-					$isAccess = false;
-					foreach($module['access'] as $accessItem) {
-						if(Yii::$app->user->can($accessItem)) {
-							$isAccess = true;
-							break;
-						}
-					}
-					if(!$isAccess) {
-						continue;
-					}
-				}
-				if(!empty($module['class'])) {
-					$navClass = $module['class'];
-					$result[] = $navClass::getMenu();
-				} else {
-					$result[] = [
-						'label' => $module['label'],
-						'url' => !empty($module['url']) ? $module['url'] : ['/' . $module['name']],
-					];
-				}
-			}
-		}
-		return $result;
-	}
 
 	static function getCurrentDbDriver() {
 		$dsn = config("components.db.dsn");

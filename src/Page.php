@@ -3,7 +3,7 @@
 namespace yii2lab\helpers;
 
 use Yii;
-use yii2lab\helper\yii\Html;
+use yii2lab\helpers\yii\Html;
 
 class Page {
 	

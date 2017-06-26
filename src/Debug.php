@@ -3,7 +3,7 @@
 namespace yii2lab\helpers;
 
 use Yii;
-use yii2lab\helper\yii\ArrayHelper;
+use yii2lab\helpers\yii\ArrayHelper;
 use yii\bootstrap\BootstrapAsset;
 use yii2lab\store\Store;
 
