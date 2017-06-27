@@ -8,7 +8,7 @@ use yii2lab\helpers\yii\FileHelper;
 class MenuHelper
 {
 
-	function buildNavbarMenu($items) {
+	public static function buildNavbarMenu($items) {
 		$result = [];
 		foreach($items as $module) {
 			if(config('modules.' . $module['name'])) {
@@ -100,7 +100,7 @@ class MenuHelper
 		return $result;
 	}
 
-	protected function getRoute($item)
+	protected static function getRoute($item)
 	{
 		if(empty($item['url'])) {
 			return false;
@@ -112,7 +112,7 @@ class MenuHelper
 		return $route;
 	}
 
-	protected function normalizeMenuItem($item)
+	protected static function normalizeMenuItem($item)
 	{
 		$route = self::getRoute($item);
 		if($route) {
@@ -121,7 +121,7 @@ class MenuHelper
 		return $item;
 	}
 
-	function normalizeMenu($menu, $callback = null)
+	static function normalizeMenu($menu, $callback = null)
 	{
 		if(isset($menu['url'])) {
 			$menu = self::normalizeMenuItem($menu);
@@ -135,7 +135,7 @@ class MenuHelper
 		return $menu;
 	}
 
-	function normalizeMenuList($menu)
+	static function normalizeMenuList($menu)
 	{
 		$result = [];
 		foreach ($menu as $i => $item) {
