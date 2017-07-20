@@ -75,7 +75,7 @@ class Helper {
 		return $value;
 	}
 	
-	static function timeForApi($value, $default = null) {
+	static function timeForApi($value, $default = null, $mask = 'Y-m-d\TH:i:s\Z') {
 		if(APP != API) {
 			return $value;
 		}
@@ -86,7 +86,7 @@ class Helper {
 			$value = date('Y-m-d H:i:s', $value);
 		}
 		$datetime = new \DateTime($value);
-		$value = $datetime->format('Y-m-d\TH:i:s\Z');
+		$value = $datetime->format($mask);
 		return $value;
 	}
 	
