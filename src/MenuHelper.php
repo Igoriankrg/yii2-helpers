@@ -8,31 +8,35 @@ use yii2lab\helpers\yii\FileHelper;
 class MenuHelper
 {
 
+	private static function checkAccess($rules) {
+		$isAccess = false;
+		foreach($rules as $accessItem) {
+			if(Yii::$app->user->can($accessItem)) {
+				$isAccess = true;
+				break;
+			}
+		}
+		return $isAccess;
+	}
+	
 	public static function buildNavbarMenu($items) {
 		$result = [];
 		foreach($items as $module) {
-			if(config('modules.' . $module['name'])) {
-				if(!empty($module['access'])) {
-					$isAccess = false;
-					foreach($module['access'] as $accessItem) {
-						if(Yii::$app->user->can($accessItem)) {
-							$isAccess = true;
-							break;
-						}
-					}
-					if(!$isAccess) {
-						continue;
-					}
-				}
-				if(!empty($module['class'])) {
-					$navClass = $module['class'];
-					$result[] = $navClass::getMenu();
-				} else {
-					$result[] = [
-						'label' => $module['label'],
-						'url' => !empty($module['url']) ? $module['url'] : ['/' . $module['name']],
-					];
-				}
+			if(!empty($module['name']) && !config('modules.' . $module['name'])) {
+				continue;
+			}
+			if(!empty($module['access']) && !self::checkAccess($module['access'])) {
+				continue;
+			}
+			if(!empty($module['class'])) {
+				$navClass = $module['class'];
+				$result[] = $navClass::getMenu();
+			} else {
+				$label = is_array($module['label']) ? call_user_func_array('t', $module['label'])  : $module['label'];
+				$result[] = [
+					'label' => $label,
+					'url' => !empty($module['url']) ? $module['url'] : ['/' . $module['name']],
+				];
 			}
 		}
 		return $result;
@@ -50,6 +54,62 @@ class MenuHelper
 			'active' => $url == $currentUrl, 
 		];
 	}
+	
+	public static function genMenu($menu)
+	{
+		prr($menu,1,1);
+		$result['label'] = !empty($menu['label']) ? $menu['label'] : mb_ucfirst($menu['name']);
+		$result['icon'] = !empty($menu['icon']) ? $menu['icon'] : '<i class="fa fa-square-o"></i>';
+		$dir = self::getControllersDir($menu['name']);
+		if(empty($dir)) {
+			return;
+		}
+		$menu['mask'] = '(.+)Controller\.php';
+		$unitList = self::getUnitsFromDir($dir, $menu['mask']);
+		if(empty($unitList)) {
+			return false;
+		}
+		if(count($unitList) > 1) {
+			foreach($unitList as $unit) {
+				$partItems[] = self::genMenuItem($unit, $menu['name']);
+			}
+			$result['items'] = $partItems;
+			$result['url'] = ['#'];
+		} else {
+			$result['url'] = [SL . $menu['name']];
+			$result['active'] = $menu['name'] == Yii::$app->controller->module->id;
+		}
+		return $result;
+	}
+	
+	/*static function normalizeMenu($menu, $callback = null)
+	{
+		if(isset($menu['url'])) {
+			$menu = self::normalizeMenuItem($menu);
+		}
+		if(empty($menu['items']) || ! is_array($menu['items'])) {
+			return $menu;
+		}
+		foreach ($menu['items'] as $item) {
+			$item = self::normalizeMenu($item, $callback);
+		}
+		return $menu;
+	}
+	
+	static function normalizeMenuList($menu)
+	{
+		$result = [];
+		foreach ($menu as $i => $item) {
+			if(isset($item['url'])) {
+				$item = self::normalizeMenu($item);
+				
+			}
+			if(!empty($item)) {
+				$result[] = $item;
+			}
+		}
+		return $result;
+	}*/
 	
 	private static function getControllersDir($module) {
 		$moduleClass = config("modules.{$module}.class");
@@ -74,32 +134,6 @@ class MenuHelper
 		return $unitList;
 	}
 	
-	public static function genMenu($menu)
-	{
-		$result['label'] = !empty($menu['label']) ? $menu['label'] : mb_ucfirst($menu['name']);
-		$result['icon'] = !empty($menu['icon']) ? $menu['icon'] : '<i class="fa fa-square-o"></i>';
-		$dir = self::getControllersDir($menu['name']);
-		if(empty($dir)) {
-			return;
-		}
-		$menu['mask'] = '(.+)Controller\.php';
-		$unitList = self::getUnitsFromDir($dir, $menu['mask']);
-		if(empty($unitList)) {
-			return false;
-		}
-		if(count($unitList) > 1) {
-			foreach($unitList as $unit) {
-				$partItems[] = self::genMenuItem($unit, $menu['name']);
-			}
-			$result['items'] = $partItems;
-			$result['url'] = ['#'];
-		} else {
-			$result['url'] = [SL . $menu['name']];
-			$result['active'] = $menu['name'] == Yii::$app->controller->module->id;
-		}
-		return $result;
-	}
-
 	protected static function getRoute($item)
 	{
 		if(empty($item['url'])) {
@@ -121,32 +155,4 @@ class MenuHelper
 		return $item;
 	}
 
-	static function normalizeMenu($menu, $callback = null)
-	{
-		if(isset($menu['url'])) {
-			$menu = self::normalizeMenuItem($menu);
-		}
-		if(empty($menu['items']) || ! is_array($menu['items'])) {
-			return $menu;
-		}
-		foreach ($menu['items'] as $item) {
-			$item = self::normalizeMenu($item, $callback);
-		}
-		return $menu;
-	}
-
-	static function normalizeMenuList($menu)
-	{
-		$result = [];
-		foreach ($menu as $i => $item) {
-			if(isset($item['url'])) {
-				$item = self::normalizeMenu($item);
-
-			}
-			if(!empty($item)) {
-				$result[] = $item;
-			}
-		}
-		return $result;
-	}
 }
