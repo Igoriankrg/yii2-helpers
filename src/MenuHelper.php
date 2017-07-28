@@ -57,7 +57,6 @@ class MenuHelper
 	
 	public static function genMenu($menu)
 	{
-		prr($menu,1,1);
 		$result['label'] = !empty($menu['label']) ? $menu['label'] : mb_ucfirst($menu['name']);
 		$result['icon'] = !empty($menu['icon']) ? $menu['icon'] : '<i class="fa fa-square-o"></i>';
 		$dir = self::getControllersDir($menu['name']);
