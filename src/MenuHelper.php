@@ -3,14 +3,96 @@
 namespace yii2lab\helpers;
 
 use Yii;
-use yii2lab\helpers\yii\FileHelper;
+use yii\helpers\Url;
 
 class MenuHelper
 {
 
-	private static function checkAccess($rules) {
+	public static function gen($items) {
+		$result = [];
+		foreach($items as $item) {
+			$menu = self::genItem($item);
+			if(!empty($menu)) {
+				$result[] = $menu;
+			}
+		}
+		return $result;
+	}
+
+	private static function genItem($menu)
+	{
+		if(!self::isHasModule($menu) || !self::isAllow($menu)) {
+			return false;
+		}
+		$menu = self::runClass($menu);
+		if(!empty($menu['items'])) {
+			$menu['items'] = MenuHelper::genList($menu['items']);
+			$menu['url'] = '#';
+		}
+		if(self::isHeader($menu)) {
+			$menu['options'] = ['class' => 'header'];
+			//$menu['icon'] = 'star';
+		}
+		if(empty($menu['icon'])) {
+			//$menu['icon'] = 'square-o';
+		}
+		return self::preMenuItem($menu);
+	}
+	
+	private static function isHeader($menu) {
+		return $menu['isHeader'];
+	}
+	
+	private static function isActive($menu) {
+		if(empty($menu['url'])) {
+			return null;
+		}
+		$currentUrl = Url::to();
+		$currentUrl = trim($currentUrl, SL);
+		return strpos($currentUrl, $menu['url']) !== false;
+	}
+	
+	private static function isJs($menu) {
+		return strpos($menu['url'], 'javascript:') !== false;
+	}
+	
+	private static function isMenu($menu) {
+		return $menu['url'] == '#';
+	}
+	
+	private static function runClass($menu) {
+		if(empty($menu['class'])) {
+			return $menu;
+		}
+		return call_user_func([$menu['class'], 'getMenu']);
+	}
+	
+	private static function genIcon($menu) {
+		if(empty($menu['icon'])) {
+			return null;
+		}
+		return '<i class="fa fa-' . $menu['icon'] . '"></i>';
+	}
+	
+	private static function isHasModule($menu) {
+		if(empty($menu['module'])) {
+			return true;
+		}
+		$key = 'modules.' . $menu['module'];
+		return config($key);
+	}
+	
+	private static function isUrl($menu)
+	{
+		return !empty($menu['url']) && !self::isJs($menu) && !self::isMenu($menu);
+	}
+	
+	private static function isAllow($menu) {
 		$isAccess = false;
-		foreach($rules as $accessItem) {
+		if(empty($menu['access'])) {
+			return true;
+		}
+		foreach($menu['access'] as $accessItem) {
 			if(Yii::$app->user->can($accessItem)) {
 				$isAccess = true;
 				break;
@@ -19,139 +101,34 @@ class MenuHelper
 		return $isAccess;
 	}
 	
-	public static function buildNavbarMenu($items) {
-		$result = [];
-		foreach($items as $module) {
-			if(!empty($module['name']) && !config('modules.' . $module['name'])) {
-				continue;
-			}
-			if(!empty($module['access']) && !self::checkAccess($module['access'])) {
-				continue;
-			}
-			if(!empty($module['class'])) {
-				$navClass = $module['class'];
-				$result[] = $navClass::getMenu();
-			} else {
-				$label = is_array($module['label']) ? call_user_func_array('t', $module['label'])  : $module['label'];
-				$result[] = [
-					'label' => $label,
-					'url' => !empty($module['url']) ? $module['url'] : ['/' . $module['name']],
-				];
-			}
-		}
-		return $result;
-	}
-
-	public static function genMenuItem($unit, $module)
+	private static function translateLabel($label)
 	{
-		$currentUrl = Yii::$app->controller->module->id . SL . Yii::$app->controller->id;
-		$ctrlName = strtolower($unit);
-		$url = $module . SL . $ctrlName;
-		return[
-			'label' => $unit, 
-			'url' => [SL . $url],
-			'icon' => '<i class="fa fa-genderless"></i>',
-			'active' => $url == $currentUrl, 
-		];
+		if(is_array($label)) {
+			$label = call_user_func_array('t', $label);
+		}
+		return $label;
 	}
 	
-	public static function genMenu($menu)
+	private static function preMenuItem($menu)
 	{
-		$result['label'] = !empty($menu['label']) ? $menu['label'] : mb_ucfirst($menu['name']);
-		$result['icon'] = !empty($menu['icon']) ? $menu['icon'] : '<i class="fa fa-square-o"></i>';
-		$dir = self::getControllersDir($menu['name']);
-		if(empty($dir)) {
-			return;
+		$menu['label'] = self::translateLabel($menu['label']);
+		if(self::isUrl($menu)) {
+			$menu['active'] = self::isActive($menu);
+			$menu['url'] = SL . $menu['url'];
+		} elseif(!empty($menu['js'])) {
+			$menu['url'] = 'javascript: ' . $menu['js'];
 		}
-		$menu['mask'] = '(.+)Controller\.php';
-		$unitList = self::getUnitsFromDir($dir, $menu['mask']);
-		if(empty($unitList)) {
-			return false;
-		}
-		if(count($unitList) > 1) {
-			foreach($unitList as $unit) {
-				$partItems[] = self::genMenuItem($unit, $menu['name']);
-			}
-			$result['items'] = $partItems;
-			$result['url'] = ['#'];
-		} else {
-			$result['url'] = [SL . $menu['name']];
-			$result['active'] = $menu['name'] == Yii::$app->controller->module->id;
-		}
-		return $result;
-	}
-	
-	/*static function normalizeMenu($menu, $callback = null)
-	{
-		if(isset($menu['url'])) {
-			$menu = self::normalizeMenuItem($menu);
-		}
-		if(empty($menu['items']) || ! is_array($menu['items'])) {
-			return $menu;
-		}
-		foreach ($menu['items'] as $item) {
-			$item = self::normalizeMenu($item, $callback);
-		}
+		$menu['icon'] = self::genIcon($menu);
 		return $menu;
 	}
 	
-	static function normalizeMenuList($menu)
+	private static function genList($list)
 	{
 		$result = [];
-		foreach ($menu as $i => $item) {
-			if(isset($item['url'])) {
-				$item = self::normalizeMenu($item);
-				
-			}
-			if(!empty($item)) {
-				$result[] = $item;
-			}
+		foreach($list as $item) {
+			$result[] = MenuHelper::genItem($item);
 		}
 		return $result;
-	}*/
-	
-	private static function getControllersDir($module) {
-		$moduleClass = config("modules.{$module}.class");
-		if(empty($moduleClass)) {
-			return;
-		}
-		$moduleClass = str_replace(BSL, SL, $moduleClass);
-		$modulePath = Yii::getAlias('@' . $moduleClass);
-		return dirname($modulePath) . DS . 'controllers';
 	}
 	
-	private static function getUnitsFromDir($dir, $mask, $to = '$1') {
-		if( ! is_dir($dir)) {
-			return [];
-		}
-		$fileList = FileHelper::scandir($dir);
-		$maskLen = strlen($mask);
-		foreach($fileList as $file) {
-			$unitList[] = preg_replace("/{$mask}/", $to, $file);
-			//$unitList[] = substr($file, 0, 0 - $maskLen);
-		}
-		return $unitList;
-	}
-	
-	protected static function getRoute($item)
-	{
-		if(empty($item['url'])) {
-			return false;
-		}
-		$route = ! is_array($item['url']) ? $item['url'] : $item['url'][0];
-		if(empty($route) || $route == '#' || strpos($route, 'javascript:') === 0) {
-			return false;
-		}
-		return $route;
-	}
-
-	protected static function normalizeMenuItem($item)
-	{
-		$route = self::getRoute($item);
-		if($route) {
-			$item['active'] = ActiveHelper::check($route);
-		}
-		return $item;
-	}
-
 }
