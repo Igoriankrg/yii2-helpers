@@ -24,19 +24,67 @@ class MenuHelper
 		if(!self::isHasModule($menu) || !self::isAllow($menu)) {
 			return false;
 		}
-		$menu = self::runClass($menu);
-		if(!empty($menu['items'])) {
-			$menu['items'] = MenuHelper::genList($menu['items']);
-			$menu['url'] = '#';
-		}
+		$menu['label'] = self::translateLabel($menu['label']);
 		if(self::isHeader($menu)) {
 			$menu['options'] = ['class' => 'header'];
-			//$menu['icon'] = 'star';
+			return $menu;
 		}
+		$menu = self::runClass($menu);
+		$menu = self::genChilds($menu);
+		$menu['active'] = self::isActive($menu);
+		$menu['url'] = self::genUrl($menu);
+		$menu['icon'] = self::genIcon($menu);
+		return $menu;
+	}
+	
+	private static function runClass($menu) {
+		if(empty($menu['class'])) {
+			return $menu;
+		}
+		return call_user_func([$menu['class'], 'getMenu']);
+	}
+	
+	private static function genChilds($menu) {
+		if(!empty($menu['items'])) {
+			$menu['items'] = MenuHelper::gen($menu['items']);
+			$menu['url'] = '#';
+		}
+		return $menu;
+	}
+	
+	private static function genIcon($menu) {
 		if(empty($menu['icon'])) {
-			//$menu['icon'] = 'square-o';
+			return null;
 		}
-		return self::preMenuItem($menu);
+		return '<i class="fa fa-' . $menu['icon'] . '"></i>';
+	}
+	
+	private static function translateLabel($label)
+	{
+		if(is_array($label)) {
+			$label = call_user_func_array('t', $label);
+		}
+		return $label;
+	}
+	
+	private static function genUrl($menu)
+	{
+		if(!empty($menu['js'])) {
+			return 'javascript: ' . $menu['js'];
+		}
+		/* if(isset($menu['url']) && $menu['url'] == '#') {
+			return $menu['url'];
+		} */
+		return SL . $menu['url'];
+	}
+	
+	private static function isActiveChild($menu) {
+		foreach($menu['items'] as $item) {
+			if(!empty($item['active'])) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private static function isHeader($menu) {
@@ -44,6 +92,12 @@ class MenuHelper
 	}
 	
 	private static function isActive($menu) {
+		if(isset($menu['active'])) {
+			return $menu['active'];
+		}
+		if(!empty($menu['items'])) {
+			return self::isActiveChild($menu);
+		}
 		if(empty($menu['url'])) {
 			return null;
 		}
@@ -60,20 +114,6 @@ class MenuHelper
 		return $menu['url'] == '#';
 	}
 	
-	private static function runClass($menu) {
-		if(empty($menu['class'])) {
-			return $menu;
-		}
-		return call_user_func([$menu['class'], 'getMenu']);
-	}
-	
-	private static function genIcon($menu) {
-		if(empty($menu['icon'])) {
-			return null;
-		}
-		return '<i class="fa fa-' . $menu['icon'] . '"></i>';
-	}
-	
 	private static function isHasModule($menu) {
 		if(empty($menu['module'])) {
 			return true;
@@ -82,53 +122,21 @@ class MenuHelper
 		return config($key);
 	}
 	
-	private static function isUrl($menu)
+	/* private static function isUrl($menu)
 	{
 		return !empty($menu['url']) && !self::isJs($menu) && !self::isMenu($menu);
-	}
+	} */
 	
 	private static function isAllow($menu) {
-		$isAccess = false;
 		if(empty($menu['access'])) {
 			return true;
 		}
 		foreach($menu['access'] as $accessItem) {
 			if(Yii::$app->user->can($accessItem)) {
-				$isAccess = true;
-				break;
+				return true;
 			}
 		}
-		return $isAccess;
-	}
-	
-	private static function translateLabel($label)
-	{
-		if(is_array($label)) {
-			$label = call_user_func_array('t', $label);
-		}
-		return $label;
-	}
-	
-	private static function preMenuItem($menu)
-	{
-		$menu['label'] = self::translateLabel($menu['label']);
-		if(self::isUrl($menu)) {
-			$menu['active'] = self::isActive($menu);
-			$menu['url'] = SL . $menu['url'];
-		} elseif(!empty($menu['js'])) {
-			$menu['url'] = 'javascript: ' . $menu['js'];
-		}
-		$menu['icon'] = self::genIcon($menu);
-		return $menu;
-	}
-	
-	private static function genList($list)
-	{
-		$result = [];
-		foreach($list as $item) {
-			$result[] = MenuHelper::genItem($item);
-		}
-		return $result;
+		return false;
 	}
 	
 }
