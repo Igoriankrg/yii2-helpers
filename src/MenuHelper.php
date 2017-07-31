@@ -88,7 +88,7 @@ class MenuHelper
 	}
 	
 	private static function isHeader($menu) {
-		return $menu['isHeader'];
+		return !empty($menu['isHeader']);
 	}
 	
 	private static function isActive($menu) {
