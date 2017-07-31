@@ -131,8 +131,17 @@ class MenuHelper
 		if(empty($menu['access'])) {
 			return true;
 		}
-		foreach($menu['access'] as $accessItem) {
-			if(Yii::$app->user->can($accessItem)) {
+		$user = Yii::$app->user;
+		foreach($menu['access'] as $rule) {
+			if($rule === '?') {
+				if($user->getIsGuest()) {
+                    return true;
+                }
+			} elseif($rule === '@') {
+				if(!$user->getIsGuest()) {
+                    return true;
+                }
+			} elseif($user->can($rule)) {
 				return true;
 			}
 		}
