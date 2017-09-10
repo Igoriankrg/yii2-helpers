@@ -3,17 +3,25 @@
 namespace yii2lab\helpers\yii;
 
 use Yii;
-use yii2lab\helpers\yii\ArrayHelper;
 use yii\helpers\BaseFileHelper;
 
 class FileHelper extends BaseFileHelper
 {
 
-	public static function save($fileName, $data, $flags = null, $context = null) {
+	public static function isEqualContent($sourceFile, $targetFile) {
+		return self::load($sourceFile) === self::load($targetFile);
+	}
+
+	public static function copy($sourceFile, $targetFile, $dirAccess = 0777) {
+		$sourceData = FileHelper::load($sourceFile);
+		FileHelper::save($targetFile, $sourceData, null, null, $dirAccess);
+	}
+
+	public static function save($fileName, $data, $flags = null, $context = null, $dirAccess = 0777) {
 		$fileName = self::normalizePath($fileName);
 		$dirName = dirname($fileName);
 		if(!is_dir($dirName)) {
-			self::createDirectory($dirName);
+			self::createDirectory($dirName, $dirAccess);
 		}
 		return file_put_contents($fileName, $data, $flags, $context);
 	}
