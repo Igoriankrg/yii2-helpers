@@ -56,8 +56,9 @@ class ArrayHelper extends YiiArrayHelper {
 		}
 	}
 	
-	private static function runCondition(&$item, $condition)
+	private static function runCondition($item, $condition)
 	{
+		$item = self::toArray($item);
 		$result = true;
 		if(empty($condition)) {
 			return true;
