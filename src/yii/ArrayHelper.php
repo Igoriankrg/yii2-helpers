@@ -2,7 +2,9 @@
 
 namespace yii2lab\helpers\yii;
 
-class ArrayHelper {
+use yii\helpers\ArrayHelper as YiiArrayHelper;
+
+class ArrayHelper extends YiiArrayHelper {
 	
 	static function inArrayKey($value, $array, $default = null)
 	{
@@ -23,7 +25,7 @@ class ArrayHelper {
 		}
 	}
 	
-	static function recursiveIterator(array $array, $callback) { //рекурсивный обход массива
+	static function recursiveIterator(array $array, $callback) { //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		foreach ($array as $key => $value) {
 			if (is_array($value)) {
 				$array[ $key ] = self::recursiveIterator($value, $callback);
