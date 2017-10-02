@@ -31,8 +31,8 @@ class MenuHelper
 		}
 		$menu = self::runClass($menu);
 		$menu = self::genChilds($menu);
-		$menu['active'] = self::isActive($menu);
 		$menu['url'] = self::genUrl($menu);
+		$menu['active'] = self::isActive($menu);
 		$menu['icon'] = self::genIcon($menu);
 		return $menu;
 	}
@@ -75,7 +75,8 @@ class MenuHelper
 		/* if(isset($menu['url']) && $menu['url'] == '#') {
 			return $menu['url'];
 		} */
-		return SL . $menu['url'];
+		$url = is_array($menu['url']) ? $menu['url'][0] : $menu['url'];
+		return SL . $url;
 	}
 	
 	private static function isActiveChild($menu) {
