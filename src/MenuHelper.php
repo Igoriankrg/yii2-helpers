@@ -104,7 +104,10 @@ class MenuHelper
 		}
 		$currentUrl = Url::to();
 		$currentUrl = trim($currentUrl, SL);
-		return strpos($currentUrl, $menu['url']) !== false;
+		$url = $menu['url'];
+		$url = trim($url, '/\\');
+		$url = str_replace('\\', '/', $url);
+		return strpos($currentUrl, $url) !== false;
 	}
 	
 	private static function isJs($menu) {
