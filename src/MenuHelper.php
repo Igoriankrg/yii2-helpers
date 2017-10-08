@@ -135,8 +135,10 @@ class MenuHelper
 		if(empty($menu['access'])) {
 			return true;
 		}
+		$access = $menu['access'];
+		$access = is_array($access) ? $access : [$access];
 		$user = Yii::$app->user;
-		foreach($menu['access'] as $rule) {
+		foreach($access as $rule) {
 			if($rule === '?') {
 				if($user->getIsGuest()) {
                     return true;
