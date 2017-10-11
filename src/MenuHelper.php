@@ -107,6 +107,9 @@ class MenuHelper
 		$url = $menu['url'];
 		$url = trim($url, '/\\');
 		$url = str_replace('\\', '/', $url);
+		if(empty($url)) {
+			return false;
+		}
 		return strpos($currentUrl, $url) !== false;
 	}
 	
