@@ -4,6 +4,7 @@ namespace yii2lab\helpers;
 
 use Yii;
 use yii\helpers\Url;
+use yii2lab\helpers\yii\ArrayHelper;
 
 class MenuHelper
 {
@@ -24,7 +25,8 @@ class MenuHelper
 		if(!self::isHasModule($menu) || !self::isAllow($menu)) {
 			return false;
 		}
-		$menu['label'] = self::translateLabel($menu['label']);
+		
+		$menu['label'] = self::translateLabel($menu);
 		if(self::isHeader($menu)) {
 			$menu['options'] = ['class' => 'header'];
 			return $menu;
@@ -59,8 +61,9 @@ class MenuHelper
 		return '<i class="fa fa-' . $menu['icon'] . '"></i>';
 	}
 	
-	private static function translateLabel($label)
+	private static function translateLabel($menu)
 	{
+		$label = ArrayHelper::getValue($menu, 'label');
 		if(is_array($label)) {
 			$label = call_user_func_array('t', $label);
 		}
