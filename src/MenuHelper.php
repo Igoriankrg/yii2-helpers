@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\Url;
 use yii2lab\helpers\yii\ArrayHelper;
 
+//TODO [nkl90]: протестировать класс!
 class MenuHelper
 {
 
@@ -75,10 +76,12 @@ class MenuHelper
 		if(!empty($menu['js'])) {
 			return 'javascript: ' . $menu['js'];
 		}
-		/* if(isset($menu['url']) && $menu['url'] == '#') {
-			return $menu['url'];
-		} */
-		$url = is_array($menu['url']) ? $menu['url'][0] : $menu['url'];
+		if(isset($menu['url'])) {
+			$url = is_array($menu['url']) ? $menu['url'][0] : $menu['url'];
+		}else{
+			$url = '';
+		}
+		
 		return SL . $url;
 	}
 	
