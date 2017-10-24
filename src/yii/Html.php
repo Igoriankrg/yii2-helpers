@@ -8,16 +8,17 @@ use yii\helpers\Html as YiiHtml;
 class Html extends YiiHtml
 {
 	const WEB_NO_IMAGE = '@web/images/image/no_image.png';
+	const FILE_NO_IMAGE = '@frontend/web/images/image/no_image.png';
 
 	public static function getDataUrl($fileName) {
 		$fileName = FileHelper::normalizePath($fileName);
-		if(FileHelper::has($fileName)) {
-			$content = FileHelper::load($fileName);
-			$mimeType = FileHelper::getMimeType($fileName);
-			$base64code = 'data:'.$mimeType.';base64, ' . base64_encode($content);
-			return $base64code;
+		if(!FileHelper::has($fileName)) {
+			$fileName = Yii::getAlias(self::FILE_NO_IMAGE);
 		}
-		return Yii::getAlias(self::WEB_NO_IMAGE);
+		$content = FileHelper::load($fileName);
+		$mimeType = FileHelper::getMimeType($fileName);
+		$base64code = 'data:'.$mimeType.';base64, ' . base64_encode($content);
+		return $base64code;
 	}
 
 	public static function fa($icon, $options = [], $prefix = 'fa fa-', $tag = 'i')
