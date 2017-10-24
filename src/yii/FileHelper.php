@@ -7,12 +7,6 @@ use yii\helpers\BaseFileHelper;
 
 class FileHelper extends BaseFileHelper
 {
-	public static function getDataUrl($fileName) {
-		$content = FileHelper::load($fileName);
-		$mimeType = FileHelper::getMimeType($fileName);
-		$base64code = 'data:'.$mimeType.';base64, ' . base64_encode($content);
-		return $base64code;
-	}
 
 	public static function isEqualContent($sourceFile, $targetFile) {
 		return self::load($sourceFile) === self::load($targetFile);
