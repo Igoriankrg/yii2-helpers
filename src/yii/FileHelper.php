@@ -7,7 +7,16 @@ use yii\helpers\BaseFileHelper;
 
 class FileHelper extends BaseFileHelper
 {
-
+	
+	public static function up($dir, $level = 1) {
+		$dir = self::normalizePath($dir);
+		$dir = trim($dir, DIRECTORY_SEPARATOR);
+		for($i = 0; $i < $level; $i++) {
+			$dir = dirname($dir);
+		}
+		return $dir;
+	}
+	
 	public static function isEqualContent($sourceFile, $targetFile) {
 		return self::load($sourceFile) === self::load($targetFile);
 	}
