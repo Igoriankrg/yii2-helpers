@@ -10,7 +10,7 @@ class FileHelper extends BaseFileHelper
 	
 	public static function up($dir, $level = 1) {
 		$dir = self::normalizePath($dir);
-		$dir = trim($dir, DIRECTORY_SEPARATOR);
+		$dir = rtrim($dir, DIRECTORY_SEPARATOR);
 		for($i = 0; $i < $level; $i++) {
 			$dir = dirname($dir);
 		}
