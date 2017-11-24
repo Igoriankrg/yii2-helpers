@@ -14,6 +14,17 @@ class Helper {
 		return  $driver;
 	}
 	
+	static function getClassName($className, $namespace) {
+		if(! Helper::isClass($className)) {
+			$className = $namespace . '\\' . $className;
+		}
+		return $className;
+	}
+	
+	static function isClass($name) {
+		return strpos($name, '\\') !== false;
+	}
+	
 	static function getDbConfig($name = null, $isEnvTest = YII_ENV_TEST)
 	{
 		$configName = $isEnvTest ? 'test' : 'main';
