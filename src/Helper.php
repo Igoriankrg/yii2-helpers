@@ -15,6 +15,9 @@ class Helper {
 	}
 	
 	static function getClassName($className, $namespace) {
+		if(empty($namespace)) {
+			return $className;
+		}
 		if(! Helper::isClass($className)) {
 			$className = $namespace . '\\' . $className;
 		}
