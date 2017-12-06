@@ -1,6 +1,6 @@
 <?php
 
-namespace yii2lab\helpers;
+namespace yii2lab\helpers\generator;
 
 use Yii;
 use yii\helpers\Inflector;

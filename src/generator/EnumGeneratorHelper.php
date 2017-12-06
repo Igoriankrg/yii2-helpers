@@ -1,6 +1,6 @@
 <?php
 
-namespace yii2lab\helpers;
+namespace yii2lab\helpers\generator;
 
 class EnumGeneratorHelper {
 	
