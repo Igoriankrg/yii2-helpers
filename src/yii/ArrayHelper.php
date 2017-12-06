@@ -64,7 +64,7 @@ class ArrayHelper extends YiiArrayHelper {
 			return true;
 		}
 		foreach ($condition as $key => $value) {
-			if($item[$key] != $value) {
+			if(isset($item[$key]) && $item[$key] != $value) {
 				$result = false;
 			}
 		}
