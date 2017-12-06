@@ -35,8 +35,4 @@ class Page {
 		return Yii::$app->view->renderFile($fileName, $vars);
 	}
 
-	private static function renderFile($fileName, $vars = []) {
-		return Yii::$app->view->renderFile($fileName . '.php', $vars);
-	}
-
 }
