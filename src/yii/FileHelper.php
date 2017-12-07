@@ -8,6 +8,10 @@ use yii\helpers\BaseFileHelper;
 class FileHelper extends BaseFileHelper
 {
 	
+	public static function rootPath() {
+		return self::up(__DIR__, 5);
+	}
+	
 	public static function up($dir, $level = 1) {
 		$dir = self::normalizePath($dir);
 		$dir = rtrim($dir, DIRECTORY_SEPARATOR);
