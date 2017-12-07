@@ -24,6 +24,10 @@ class Helper {
 		return $className;
 	}
 	
+	static function isAlias($name) {
+		return $name[0] == '@';
+	}
+	
 	static function isClass($name) {
 		return strpos($name, '\\') !== false;
 	}

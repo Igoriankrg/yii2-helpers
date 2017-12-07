@@ -30,8 +30,13 @@ class Page {
 	}
 	
 	static function snippet($name, $from = null, $vars = []) {
-		$from = !empty($from) ? $from : '@app';
-		$fileName = $from . '/views/snippets/' . $name . '.php';
+		if(Helper::isAlias($name)) {
+			$fileName = $name;
+        } else {
+			$from = !empty($from) ? $from : '@app';
+			$fileName = $from . '/views/snippets/' . $name;
+        }
+        $fileName .= '.php';
 		return Yii::$app->view->renderFile($fileName, $vars);
 	}
 
