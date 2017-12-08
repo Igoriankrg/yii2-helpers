@@ -28,6 +28,15 @@ class Helper {
 		return $name[0] == '@';
 	}
 	
+	static function getPath($name) {
+		if(self::isAlias($name)) {
+			$name = str_replace('\\', '/', $name);
+			return Yii::getAlias($name);
+		} else {
+			return ROOT_DIR . DS . $name;
+		}
+	}
+	
 	static function isClass($name) {
 		return strpos($name, '\\') !== false;
 	}
