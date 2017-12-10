@@ -3,7 +3,6 @@
 namespace yii2lab\helpers;
 
 use Yii;
-use yii2lab\helpers\yii\ArrayHelper;
 use yii2lab\helpers\yii\FileHelper;
 
 class Helper {
@@ -146,17 +145,6 @@ class Helper {
 			$result[] = API . '/' . $app;
 		}
 		return $result;
-	}
-	
-	public static function getModules($app) {
-		$dir = ROOT_DIR . DS . $app . '/modules';
-		if( ! is_dir($dir)) {
-			return [];
-		}
-		$modules = scandir($dir);
-		ArrayHelper::removeByValue('.', $modules);
-		ArrayHelper::removeByValue('..', $modules);
-		return $modules;
 	}
 	
 }
