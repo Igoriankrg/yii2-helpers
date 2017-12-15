@@ -58,17 +58,26 @@ class ArrayHelper extends YiiArrayHelper {
 	
 	private static function runCondition($item, $condition)
 	{
-		$item = self::toArray($item);
-		$result = true;
 		if(empty($condition)) {
 			return true;
 		}
-		foreach ($condition as $key => $value) {
-			if(isset($item[$key]) && $item[$key] != $value) {
-				$result = false;
+		$item = self::toArray($item);
+		foreach ($condition as $fieldName => $conditionValue) {
+			$itemValue = self::getValue($item, $fieldName);
+			if(self::isEqual($itemValue, $conditionValue)) {
+				return true;
 			}
 		}
-		return $result;
+		return false;
 	}
 	
+	private static function isEqual($itemValue, $conditionValue) {
+		if(empty($itemValue) && empty($conditionValue)) {
+			return true;
+		}
+		if(!empty($itemValue) && $itemValue == $conditionValue) {
+			return true;
+		}
+		return false;
+	}
 }
