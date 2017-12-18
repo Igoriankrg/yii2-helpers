@@ -51,7 +51,14 @@ class FileHelper extends BaseFileHelper
 		$fileName = self::normalizePath($fileName);
 		return is_file($fileName);
 	}
-
+	
+	public static function normalizePathList($list) {
+		foreach($list as &$path) {
+			$path = self::normalizePath($path);
+		}
+		return $list;
+	}
+	
 	public static function scanDir($dir, $options = null) {
 		$pathes = scandir($dir);
 		ArrayHelper::removeByValue('.', $pathes);
