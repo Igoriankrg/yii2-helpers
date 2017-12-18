@@ -30,6 +30,13 @@ class ClassGeneratorHelper {
 		$namespace = trim($data['dirAlias'], '@/\\');
 		$namespace = str_replace('/', '\\', $namespace);
 		
+		$data['code'] = ArrayHelper::getValue($data, 'code');
+		$data['const'] = ArrayHelper::getValue($data, 'const');
+		$data['use'] = ArrayHelper::getValue($data, 'use');
+		$data['doc'] = ArrayHelper::getValue($data, 'doc');
+		$data['baseName'] = ArrayHelper::getValue($data, 'baseName');
+		$data['afterClassName'] = ArrayHelper::getValue($data, 'afterClassName');
+		
 		$const = self::genConstCode($data['const']);
 		if(!empty($const)) {
 			$dataCode = !empty($data['code']) ? PHP_EOL . $data['code'] : '';
