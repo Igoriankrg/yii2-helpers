@@ -23,10 +23,9 @@ class MenuHelper
 
 	private static function genItem($menu)
 	{
-		if(!self::isHasModule($menu) || !self::isAllow($menu)) {
+		if(self::isHidden($menu)) {
 			return false;
 		}
-		
 		$menu['label'] = self::translateLabel($menu);
 		if(self::isHeader($menu)) {
 			$menu['options'] = ['class' => 'header'];
@@ -85,6 +84,10 @@ class MenuHelper
 		return SL . $url;
 	}
 	
+	private static function isHidden($menu) {
+		return !self::isHasModule($menu) || !self::isHasDomain($menu) || !self::isAllow($menu) || !empty($menu['hide']);
+	}
+	
 	private static function isActiveChild($menu) {
 		foreach($menu['items'] as $item) {
 			if(!empty($item['active'])) {
@@ -132,6 +135,14 @@ class MenuHelper
 			return true;
 		}
 		$key = 'modules.' . $menu['module'];
+		return config($key);
+	}
+	
+	private static function isHasDomain($menu) {
+		if(empty($menu['domain'])) {
+			return true;
+		}
+		$key = 'components.' . $menu['domain'];
 		return config($key);
 	}
 	
