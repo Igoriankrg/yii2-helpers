@@ -2,18 +2,15 @@
 
 namespace yii2lab\helpers\yii;
 
-use Yii;
 use yii\helpers\Html as YiiHtml;
 
 class Html extends YiiHtml
 {
-	const WEB_NO_IMAGE = '@web/images/image/no_image.png';
-	const FILE_NO_IMAGE = '@frontend/web/images/image/no_image.png';
-
+	
 	public static function getDataUrl($fileName) {
 		$fileName = FileHelper::normalizePath($fileName);
 		if(!FileHelper::has($fileName)) {
-			$fileName = Yii::getAlias(self::FILE_NO_IMAGE);
+			return null;
 		}
 		$content = FileHelper::load($fileName);
 		$mimeType = FileHelper::getMimeType($fileName);
