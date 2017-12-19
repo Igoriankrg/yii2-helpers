@@ -6,6 +6,10 @@ use yii\helpers\Url;
 
 class UrlHelper {
 	
+	static function isAbsolute($url) {
+		return preg_match('#(https?:)#', $url);
+	}
+	
 	static function generateUrl($url, $getParameters = null) {
 		$url = Url::to([$url]);
 		if(!empty($getParameters)) {
