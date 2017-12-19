@@ -8,6 +8,11 @@ use yii\helpers\BaseFileHelper;
 class FileHelper extends BaseFileHelper
 {
 	
+	public static function isAbsolute($path) {
+		$pattern = '[/\\\\]|[a-zA-Z]:[/\\\\]|[a-z][a-z0-9+.-]*://';
+		return (bool) preg_match("#$pattern#Ai", $path);
+	}
+	
 	public static function rootPath() {
 		return self::up(__DIR__, 5);
 	}
