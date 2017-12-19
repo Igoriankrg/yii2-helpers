@@ -3,13 +3,28 @@
 namespace yii2lab\helpers;
 
 use Yii;
+use yii\helpers\Html;
 use yii\helpers\Url;
 use yii2lab\helpers\yii\ArrayHelper;
+use yii2lab\misc\enums\HtmlEnum;
 
 //TODO [nkl90]: протестировать класс!
 class MenuHelper
 {
-
+	
+	public static function renderMenu($items, $glue = HtmlEnum::PIPE) {
+		$menuArr = [];
+		foreach($items as $item) {
+			$html = '';
+			if(!empty($item['icon'])) {
+				$html .= $item['icon'] . ' ';
+			}
+			$html .= Html::a($item['label'], $item['url']);
+			$menuArr[] = $html;
+		}
+		return implode($glue, $menuArr);
+	}
+	
 	public static function gen($items) {
 		$result = [];
 		foreach($items as $item) {
@@ -80,12 +95,20 @@ class MenuHelper
 		}else{
 			$url = '';
 		}
-		
-		return SL . $url;
+		if(!UrlHelper::isAbsolute($url)) {
+			$url = SL . $url;
+		}
+		return $url;
 	}
 	
 	private static function isHidden($menu) {
-		return !self::isHasModule($menu) || !self::isHasDomain($menu) || !self::isAllow($menu) || !empty($menu['hide']);
+		
+		return
+			!self::isHasModule($menu) ||
+			!self::isHasDomain($menu) ||
+			!self::isAllow($menu) ||
+			!empty($menu['hide']) ||
+			(isset($menu['visible']) && empty($menu['visible']));
 	}
 	
 	private static function isActiveChild($menu) {
