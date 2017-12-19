@@ -2,22 +2,27 @@
 
 namespace yii2lab\helpers;
 
+use Yii;
 use yii2lab\helpers\yii\ArrayHelper;
 
 class ModuleHelper
 {
 	
-	static function has($name) {
-		$config = self::getConfig($name);
+	public static function has($name, $app = null) {
+		$config = self::getConfig($name, $app);
 		return !empty($config);
 	}
 	
-	static function getConfig($name) {
+	public static function getConfig($name, $app = null) {
 		$key = 'modules.' . $name;
+		if(!empty($app) && $app != APP) {
+			$modules = self::loadConfigFromApp($app);
+			return ArrayHelper::getValue($modules, $key);
+		}
 		return config($key);
 	}
 	
-	static function getClass($name) {
+	public static function getClass($name) {
 		$config = self::getConfig($name);
 		$moduleClass = is_array($config) ? $config['class'] : $config;
 		return $moduleClass;
@@ -32,5 +37,10 @@ class ModuleHelper
 		ArrayHelper::removeByValue('.', $modules);
 		ArrayHelper::removeByValue('..', $modules);
 		return $modules;
+	}
+	
+	private static function loadConfigFromApp($app) {
+		$appPath = Yii::getAlias('@' . $app);
+		return include($appPath . DS . 'config' . DS . 'modules.php');
 	}
 }
