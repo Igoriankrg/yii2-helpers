@@ -13,6 +13,11 @@ class ModuleHelper
 		return !empty($config);
 	}
 	
+	public static function allByApp($app = null) {
+		$modules = self::loadConfigFromApp($app);
+		return $modules['modules'];
+	}
+	
 	public static function getConfig($name, $app = null) {
 		$key = 'modules.' . $name;
 		if(!empty($app) && $app != APP) {
