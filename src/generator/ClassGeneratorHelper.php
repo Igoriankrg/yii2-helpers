@@ -2,10 +2,8 @@
 
 namespace yii2lab\helpers\generator;
 
-use Yii;
 use yii\helpers\Inflector;
 use yii2lab\helpers\yii\ArrayHelper;
-use yii2lab\helpers\yii\FileHelper;
 
 class ClassGeneratorHelper {
 	
@@ -18,15 +16,15 @@ class ClassGeneratorHelper {
 		return $constName;
 	}
 	
-	public static function generateClass($data) {
+	public static function generate($data) {
 		$data['dirAlias'] = dirname($data['className']);
 		$data['baseName'] = basename($data['className']);
-		$code = self::generateClassCode($data);
-		$fileName = Yii::getAlias($data['dirAlias'].'/'.$data['baseName'].'.php');
-		FileHelper::save($fileName, $code);
+		$code = self::generateCode($data);
+		$data['code'] = $code;
+		FileGeneratorHelper::generate($data);
 	}
 	
-	private static function generateClassCode($data) {
+	private static function generateCode($data) {
 		$namespace = trim($data['dirAlias'], '@/\\');
 		$namespace = str_replace('/', '\\', $namespace);
 		
@@ -100,8 +98,6 @@ class ClassGeneratorHelper {
 	
 	private static function getClassCodeTemplate() {
 		$code = <<<'CODE'
-<?php
-
 namespace {namespace};
 {use}
 /**

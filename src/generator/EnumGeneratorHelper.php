@@ -11,9 +11,9 @@ class EnumGeneratorHelper {
 		'afterClassName' => 'extends BaseEnum',
 	];
 	
-	public static function generateClass($config) {
+	public static function generate($config) {
 		$config = ArrayHelper::merge($config, self::$defaultConfig);
-		ClassGeneratorHelper::generateClass($config);
+		ClassGeneratorHelper::generate($config);
 	}
 	
 }
