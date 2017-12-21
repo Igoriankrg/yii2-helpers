@@ -36,6 +36,14 @@ class Helper {
 		}
 	}
 	
+	public static function getNamespace($name) {
+		$name = trim($name, '\\');
+		$arr = explode('\\', $name);
+		array_pop($arr);
+		$name = implode('\\', $arr);
+		return $name;
+	}
+	
 	static function isClass($name) {
 		return strpos($name, '\\') !== false;
 	}
