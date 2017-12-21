@@ -2,11 +2,21 @@
 
 namespace yii2lab\helpers\yii;
 
-use Yii;
 use yii\helpers\BaseFileHelper;
 
 class FileHelper extends BaseFileHelper
 {
+	
+	public static function remove($path) {
+		if(is_dir($path)) {
+			FileHelper::removeDirectory(ROOT_DIR . DS . $path);
+			return true;
+		} elseif(is_file($path)) {
+			unlink(ROOT_DIR . DS . $path);
+			return true;
+		}
+		return false;
+	}
 	
 	public static function isAbsolute($path) {
 		$pattern = '[/\\\\]|[a-zA-Z]:[/\\\\]|[a-z][a-z0-9+.-]*://';
