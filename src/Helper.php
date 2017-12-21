@@ -18,7 +18,7 @@ class Helper {
 			return $className;
 		}
 		if(! Helper::isClass($className)) {
-			$className = $namespace . '\\' . $className;
+			$className = $namespace . '\\' . ucfirst($className);
 		}
 		return $className;
 	}
@@ -103,11 +103,11 @@ class Helper {
 		return $randstring;
 	}
 	
-	static function strToArray($value) {
+	/*static function strToArray($value) {
 		$value = trim($value, '{}');
 		$value = explode(',', $value);
 		return $value;
-	}
+	}*/
 	
 	static function timeForApi($value, $default = null, $mask = 'Y-m-d\TH:i:s\Z') {
 		if(APP != API) {
@@ -124,13 +124,18 @@ class Helper {
 		return $value;
 	}
 	
+	/**
+	 * @return array
+	 *
+	 * @deprecated moved to common\enums\app\AppEnum::values()
+	 */
 	public static function getApps() {
 		return [COMMON, FRONTEND, BACKEND, API, CONSOLE];
 	}
 	
-	public static function getWebApps() {
+	/*public static function getWebApps() {
 		return [COMMON, FRONTEND, BACKEND, API];
-	}
+	}*/
 	
 	public static function getApiVersionList()
 	{
