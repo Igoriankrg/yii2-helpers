@@ -2,7 +2,7 @@
 
 namespace yii2lab\helpers;
 
-class String {
+class StringHelper {
 
 	static function mask($value, $length = 2, $valueLength = null) {
 		if(empty($value)) {
