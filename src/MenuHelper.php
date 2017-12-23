@@ -27,8 +27,11 @@ class MenuHelper
 	
 	public static function gen($items) {
 		$result = [];
-		foreach($items as $item) {
-			$menu = self::genItem($item);
+		foreach($items as $index => $config) {
+			if(is_string($config)) {
+				$config = ['class' => $config];
+			}
+			$menu = self::genItem($config);
 			if(!empty($menu)) {
 				$result[] = $menu;
 			}
@@ -38,6 +41,9 @@ class MenuHelper
 
 	private static function genItem($menu)
 	{
+		if(!empty($menu['class'])) {
+			$menu = self::runClass($menu);
+		}
 		if(self::isHidden($menu)) {
 			return false;
 		}
@@ -46,7 +52,6 @@ class MenuHelper
 			$menu['options'] = ['class' => 'header'];
 			return $menu;
 		}
-		$menu = self::runClass($menu);
 		$menu = self::genChilds($menu);
 		$menu['url'] = self::genUrl($menu);
 		$menu['active'] = self::isActive($menu);
