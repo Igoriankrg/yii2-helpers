@@ -44,7 +44,13 @@ class Helper {
 		return $name;
 	}
 	
-	static function normalizeComponentConfig($config) {
+	static function normalizeComponentConfig($config, $class = null) {
+		if(empty($config) && empty($class)) {
+			return null;
+		}
+		if(!empty($class)) {
+			$config['class'] = $class;
+		}
 		if(is_array($config)) {
 			return $config;
 		}
