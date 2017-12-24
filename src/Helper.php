@@ -44,8 +44,19 @@ class Helper {
 		return $name;
 	}
 	
+	static function normalizeComponentConfig($config) {
+		if(is_array($config)) {
+			return $config;
+		}
+		$resultConfig = [];
+		if(self::isClass($config)) {
+			$resultConfig['class'] = $config;
+		}
+		return $resultConfig;
+	}
+	
 	static function isClass($name) {
-		return strpos($name, '\\') !== false;
+		return is_string($name) && strpos($name, '\\') !== false;
 	}
 	
 	static function getDbConfig($name = null, $isEnvTest = YII_ENV_TEST)
