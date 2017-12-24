@@ -7,6 +7,21 @@ use yii\helpers\BaseFileHelper;
 class FileHelper extends BaseFileHelper
 {
 	
+	public static function findInFileByExp($file, $search, $returnIndex = null) {
+		$content = self::load($file);
+		$finded = [];
+		preg_match_all("/{$search}/", $content, $out);
+		if(!empty($out[0])) {
+			if($returnIndex === null) {
+				$item = $out;
+			} else {
+				$item = $out[$returnIndex];
+			}
+			$finded[] = $item;
+		}
+		return $finded;
+	}
+	
 	public static function remove($path) {
 		if(is_dir($path)) {
 			FileHelper::removeDirectory(ROOT_DIR . DS . $path);
