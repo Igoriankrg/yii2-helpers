@@ -2,10 +2,22 @@
 
 namespace yii2lab\helpers\yii;
 
+use Yii;
 use yii\helpers\BaseFileHelper;
 
 class FileHelper extends BaseFileHelper
 {
+	
+	public static function getAlias($path) {
+		$path = ltrim($path, '/\\');
+		if($path[0] == '@') {
+			$path = str_replace('\\', '/', $path);
+			$dir = Yii::getAlias($path);
+		} else {
+			$dir = ROOT_DIR . DS . $path;
+		}
+		return self::normalizePath($dir);
+	}
 	
 	public static function findInFileByExp($file, $search, $returnIndex = null) {
 		$content = self::load($file);
