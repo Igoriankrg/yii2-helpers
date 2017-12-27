@@ -8,6 +8,30 @@ use yii\helpers\BaseFileHelper;
 class FileHelper extends BaseFileHelper
 {
 	
+	public static function normalizeAlias($path) {
+		if(empty($path)) {
+			return $path;
+		}
+		$path = str_replace('\\', '/', $path);
+		if(!self::isAlias($path)) {
+			$path = '@' . $path;
+		}
+		return $path;
+	}
+	
+	public static function pathToAbsolute($path) {
+		if(strpos($path, ROOT_DIR) === false) {
+			$dir = ROOT_DIR . DS . $path;
+		} else {
+			$dir = $path;
+		}
+		return $dir;
+	}
+	
+	public static function isAlias($path) {
+		return is_string($path) && !empty($path) && $path{0} == '@';
+	}
+	
 	public static function getAlias($path) {
 		$path = ltrim($path, '/\\');
 		if($path[0] == '@') {
