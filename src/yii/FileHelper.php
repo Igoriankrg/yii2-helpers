@@ -118,7 +118,7 @@ class FileHelper extends BaseFileHelper
 		return $result;
 	}
 	
-	function dirFromTime($level=3,$time=null) {
+	public static function dirFromTime($level=3,$time=null) {
 		if(empty($time)) $time = TIMESTAMP;
 		if($level >= 1) $format[] = 'Y';
 		if($level >= 2) $format[] = 'm';
@@ -131,7 +131,7 @@ class FileHelper extends BaseFileHelper
 		return $name;
 	}
 
-	function fileFromTime($level=5,$time=null,$delimiter='.',$delimiter2='_') {
+	public static function fileFromTime($level=5,$time=null,$delimiter='.',$delimiter2='_') {
 		if(empty($time)) $time = TIMESTAMP;
 		$format = '';
 		if($level >= 1) $format .= 'Y';
@@ -144,7 +144,7 @@ class FileHelper extends BaseFileHelper
 		return $name;
 	}
 	
-	function findFilesWithPath($source_dir, $directory_depth = 0, $hidden = FALSE, $empty_dir = false) {
+	public static function findFilesWithPath($source_dir, $directory_depth = 0, $hidden = FALSE, $empty_dir = false) {
 		if(empty($source_dir)) {
 		 $source_dir = '.';
 		}
