@@ -6,7 +6,19 @@ use Yii;
 use yii2lab\helpers\yii\FileHelper;
 
 class Helper {
-
+	
+	static function getBundlePath($path) {
+		if(empty($path)) {
+			return false;
+		}
+		$alias = FileHelper::normalizeAlias($path);
+		$dir = Yii::getAlias($alias);
+		if(!is_dir($dir)) {
+			return false;
+		}
+		return $alias;
+	}
+	
 	static function getCurrentDbDriver() {
 		$dsn = config("components.db.dsn");
 		$driver = explode(':', $dsn)[0];

@@ -4,6 +4,7 @@ namespace yii2lab\helpers;
 
 use Yii;
 use yii2lab\helpers\yii\ArrayHelper;
+use yii2lab\helpers\yii\FileHelper;
 
 class ModuleHelper
 {
@@ -42,6 +43,21 @@ class ModuleHelper
 		ArrayHelper::removeByValue('.', $modules);
 		ArrayHelper::removeByValue('..', $modules);
 		return $modules;
+	}
+	
+	public static function messagesAlias($bundleName) {
+		$moduleClass = self::getClass($bundleName);
+		if(!class_exists($moduleClass)) {
+			return null;
+		}
+		if(property_exists($moduleClass, 'langDir') && !empty($moduleClass::$langDir)) {
+			return $moduleClass::$langDir;
+		}
+		$path = Helper::getNamespace($moduleClass);
+		if(empty($path)) {
+			return null;
+		}
+		return Helper::getBundlePath($path . SL . 'messages');
 	}
 	
 	private static function loadConfigFromApp($app) {
