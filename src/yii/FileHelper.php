@@ -34,11 +34,11 @@ class FileHelper extends BaseFileHelper
 	
 	public static function getAlias($path) {
 		$path = ltrim($path, '/\\');
-		if($path[0] == '@') {
-			$path = str_replace('\\', '/', $path);
+		if(self::isAlias($path)) {
+			$path = self::normalizeAlias($path);
 			$dir = Yii::getAlias($path);
 		} else {
-			$dir = ROOT_DIR . DS . $path;
+			$dir = self::pathToAbsolute($path);
 		}
 		return self::normalizePath($dir);
 	}
