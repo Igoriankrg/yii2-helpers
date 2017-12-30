@@ -115,7 +115,7 @@ class FileHelper extends BaseFileHelper
 	
 	public static function has($fileName) {
 		$fileName = self::normalizePath($fileName);
-		return is_file($fileName);
+		return is_file($fileName) || is_dir($fileName);
 	}
 	
 	public static function normalizePathList($list) {
