@@ -4,10 +4,35 @@ namespace yii2lab\helpers;
 
 use Yii;
 use yii2lab\helpers\yii\ArrayHelper;
-use yii2lab\helpers\yii\FileHelper;
 
 class ModuleHelper
 {
+	
+	public static function isActiveUrl($urlList) {
+		$urlList = ArrayHelper::toArray($urlList);
+		foreach($urlList as $url) {
+			if(self::isActiveUrlItem($url)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private static function isActiveUrlItem($url) {
+		$url = trim($url, SL);
+		$urlParts = explode(SL, $url);
+		$urlParts = array_slice($urlParts,0, 3);
+		
+		$currentParts[] = Yii::$app->controller->module->id;
+		$currentParts[] = Yii::$app->controller->id;
+		$currentParts[] = Yii::$app->controller->action->id;
+		foreach($urlParts as $k => $part) {
+			if($currentParts[$k] != $part) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	public static function has($name, $app = null) {
 		$config = self::getConfig($name, $app);
