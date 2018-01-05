@@ -26,6 +26,9 @@ class MenuHelper
 	}
 	
 	public static function gen($items) {
+		if(is_string($items)) {
+			$items = self::runClass(['class' => $items]);
+		}
 		$result = [];
 		foreach($items as $index => $config) {
 			if(is_string($config)) {
