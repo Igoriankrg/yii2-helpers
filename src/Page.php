@@ -19,6 +19,7 @@ class Page {
 			<?php Yii::$app->view->head() ?>
 		</head>
 		<body <?= Html::renderTagAttributes($attrs) ?> >
+        <span id="go_to_top"></span>
 		<?php Yii::$app->view->beginBody();
 	}
 	
