@@ -66,6 +66,9 @@ class MenuHelper
 		if(empty($menu['class'])) {
 			return $menu;
 		}
+		if(!class_exists($menu['class'])) {
+			return null;
+		}
 		return call_user_func([$menu['class'], 'getMenu']);
 	}
 	
