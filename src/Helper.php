@@ -9,6 +9,15 @@ use yii2lab\helpers\yii\FileHelper;
 
 class Helper {
 	
+	public static function assignAttributesForList($configList, $attributes = null) {
+		foreach($configList as &$item) {
+			foreach($attributes as $attributeName => $attributeValue) {
+				$item[$attributeName] = $attributeValue;
+			}
+		}
+		return $configList;
+	}
+	
 	/**
 	 * @param       $type
 	 * @param array $params
