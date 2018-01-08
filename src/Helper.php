@@ -3,9 +3,65 @@
 namespace yii2lab\helpers;
 
 use Yii;
+use yii\base\InvalidConfigException;
+use yii\web\ServerErrorHttpException;
 use yii2lab\helpers\yii\FileHelper;
 
 class Helper {
+	
+	/**
+	 * @param       $type
+	 * @param array $params
+	 * @param null  $interface
+	 *
+	 * @return object
+	 * @throws InvalidConfigException
+	 * @throws ServerErrorHttpException
+	 */
+	public static function createObject($type, array $params = [], $interface = null) {
+		if(empty($type)) {
+			throw new InvalidConfigException('Empty class config');
+		}
+		if(class_exists('Yii')) {
+			$object = Yii::createObject($type, $params);
+		} else {
+			$type = self::normalizeComponentConfig($type);
+			$object = new $type['class'];
+			self::configure($object, $params);
+		}
+		if(!empty($interface)) {
+			self::checkInterface($object, $interface);
+		}
+		return $object;
+	}
+	
+	/**
+	 * @param $object
+	 * @param $interface
+	 *
+	 * @throws ServerErrorHttpException
+	 */
+	public static function checkInterface($object, $interface) {
+		if(!is_object($object)) {
+			throw new ServerErrorHttpException('Object not be object type');
+		}
+		if(!$object instanceof $interface) {
+			throw new ServerErrorHttpException('Object not be instance of "'.$interface.'"');
+		}
+	}
+	
+	public static function configure($object, $properties)
+	{
+		if(empty($properties)) {
+			return $object;
+		}
+		foreach ($properties as $name => $value) {
+			if($name != 'class') {
+				$object->$name = $value;
+			}
+		}
+		return $object;
+	}
 	
 	static function getBundlePath($path) {
 		if(empty($path)) {
@@ -66,11 +122,10 @@ class Helper {
 		if(is_array($config)) {
 			return $config;
 		}
-		$resultConfig = [];
 		if(self::isClass($config)) {
-			$resultConfig['class'] = $config;
+			$config = ['class' => $config];
 		}
-		return $resultConfig;
+		return $config;
 	}
 	
 	static function isClass($name) {
