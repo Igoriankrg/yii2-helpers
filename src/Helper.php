@@ -9,7 +9,20 @@ use yii2lab\helpers\yii\FileHelper;
 
 class Helper {
 	
+	public static function isEnabledComponent($config) {
+		if(!is_array($config)) {
+			return $config;
+		}
+		$isEnabled = !isset($config['isEnabled']) || !empty($config['isEnabled']);
+		unset($config['isEnabled']);
+		if(!$isEnabled) {
+			return null;
+		}
+		return $config;
+	}
+	
 	public static function assignAttributesForList($configList, $attributes = null) {
+		$configList = self::normalizeComponentListConfig($configList);
 		foreach($configList as &$item) {
 			foreach($attributes as $attributeName => $attributeValue) {
 				$item[$attributeName] = $attributeValue;
@@ -121,6 +134,13 @@ class Helper {
 		return $name;
 	}
 	
+	static function normalizeComponentListConfig($config) {
+		foreach($config as &$item) {
+			$item = self::normalizeComponentConfig($item);
+		}
+		return $config;
+	}
+	
 	static function normalizeComponentConfig($config, $class = null) {
 		if(empty($config) && empty($class)) {
 			return null;
@@ -229,6 +249,19 @@ class Helper {
 	/*public static function getWebApps() {
 		return [COMMON, FRONTEND, BACKEND, API];
 	}*/
+	
+	public static function getApiVersionNumberList()
+	{
+		$dir = Yii::getAlias('@api');
+		$dirList = FileHelper::scanDir($dir);
+		$result = [];
+		foreach($dirList as $path) {
+			if (preg_match('#v([0-9]+)#i', $path, $matches)) {
+				$result[] = $matches[1];
+			}
+		}
+		return $result;
+	}
 	
 	public static function getApiVersionList()
 	{
