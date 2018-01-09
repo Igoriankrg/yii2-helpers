@@ -11,13 +11,18 @@ class Debug {
 	
 	public static function varDump($val, $exit = false) {
 		if(APP == API) {
-			$response = Yii::$app->getResponse();
-			$response->clearOutputBuffers();
-			$response->setStatusCode(200);
-			//$response->format = \yii\web\Response::FORMAT_JSON;
-			$response->content = json_encode($val, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-			$response->send();
-			Yii::$app->end();
+			if(is_object(Yii::$app)) {
+				$response = Yii::$app->getResponse();
+				$response->clearOutputBuffers();
+				$response->setStatusCode(200);
+				//$response->format = \yii\web\Response::FORMAT_JSON;
+				$response->content = json_encode($val, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+				$response->send();
+				Yii::$app->end();
+			} else {
+				echo json_encode($val, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+				exit;
+			}
 		}
 		$val = self::recursiveHtmlentities($val);
 		$store = new Store('php');
