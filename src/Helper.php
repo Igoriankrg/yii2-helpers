@@ -8,7 +8,7 @@ use yii\web\ServerErrorHttpException;
 use yii2lab\helpers\yii\FileHelper;
 
 class Helper {
-	
+
 	public static function isEnabledComponent($config) {
 		if(!is_array($config)) {
 			return $config;
