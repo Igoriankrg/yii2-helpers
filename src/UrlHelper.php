@@ -6,6 +6,26 @@ use yii\helpers\Url;
 
 class UrlHelper {
 	
+	public static function currentDomain() {
+		return self::extractDomainFromUrl($_SERVER['HTTP_HOST']);
+	}
+	
+	public static function baseDomain($domain) {
+		$arr = explode(DOT, $domain);
+		while(count($arr) > 2) {
+			array_shift($arr);
+		}
+		return implode(DOT, $arr);
+	}
+	
+	public static function extractDomainFromUrl($url) {
+		$domainArr = explode(":", $url);
+		$domain = count($domainArr) > 1 ? $domainArr[1] : $domainArr[0];
+		$segmentArr = explode(":", $domain);
+		$domain = trim($segmentArr[0], '/');
+		return $domain;
+	}
+	
 	public static function isAbsolute($url) {
 		$pattern = "/^(?:ftp|https?|feed)?:?\/\/(?:(?:(?:[\w\.\-\+!$&'\(\)*\+,;=]|%[0-9a-f]{2})+:)*
         (?:[\w\.\-\+%!$&'\(\)*\+,;=]|%[0-9a-f]{2})+@)?(?:
