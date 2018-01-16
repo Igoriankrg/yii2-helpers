@@ -87,8 +87,8 @@ class ModuleHelper
 	
 	private static function loadConfigFromApp($app) {
 		$appPath = Yii::getAlias('@' . $app);
-		$main = include($appPath . DS . 'config' . DS . 'modules.php');
-		$local = include($appPath . DS . 'config' . DS . 'modules-local.php');
-		return ArrayHelper::merge($main, $local);
+		$main = @include($appPath . DS . 'config' . DS . 'modules.php');
+		$local = @include($appPath . DS . 'config' . DS . 'modules-local.php');
+		return ArrayHelper::merge($main ?: [], $local ?: []);
 	}
 }
