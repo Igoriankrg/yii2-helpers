@@ -6,7 +6,9 @@ class StringHelper {
 	
 	public static function search($content, $text) {
 		$text = self::extractWords($text);
+		$text = mb_strtolower($text);
 		$content = self::extractWords($content);
+		$content = mb_strtolower($content);
 		if(empty($text) || empty($content)) {
 			return false;
 		}
@@ -16,10 +18,11 @@ class StringHelper {
 	
 	public static function getWordArray($content) {
 		$content = self::extractWords($content);
-		return explode(SPC, $content);
+		return self::textToArray($content);
 	}
 	
 	public static function getWordRate($content) {
+		$content = mb_strtolower($content);
 		$wordArray = self::getWordArray($content);
 		$result = [];
 		foreach($wordArray as $word) {
@@ -31,22 +34,22 @@ class StringHelper {
 		return $result;
 	}
 	
-	static function textToLine($text) {
+	public static function textToLine($text) {
 		$text = preg_replace('#\s+#m', SPC, $text);
 		return $text;
 	}
 	
-	static function removeDoubleSpace($text) {
+	public static function removeDoubleSpace($text) {
 		$text = preg_replace('# +#m', SPC, $text);
 		return $text;
 	}
 	
-	static function textToArray($text) {
+	public static function textToArray($text) {
 		$text = self::removeDoubleSpace($text);
 		return explode(SPC, $text);
 	}
 	
-	static function mask($value, $length = 2, $valueLength = null) {
+	public static function mask($value, $length = 2, $valueLength = null) {
 		if(empty($value)) {
 			return '';
 		}
@@ -57,9 +60,8 @@ class StringHelper {
 	}
 	
 	private static function extractWords($text) {
-		$text = mb_strtolower($text);
-		$text = preg_replace('/[^0-9a-zа-яё]/iu', ' ', $text);
-		$text = preg_replace('/\s+/iu', ' ', $text);
+		$text = preg_replace('/[^0-9A-Za-zА-Яа-яЁё]/iu', SPC, $text);
+		$text = self::removeDoubleSpace($text);
 		$text = trim($text);
 		return $text;
 	}
