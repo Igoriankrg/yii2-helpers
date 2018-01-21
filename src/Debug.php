@@ -9,6 +9,21 @@ use yii2lab\store\Store;
 
 class Debug {
 	
+	public static function prr($val, $exit = false, $forceToArray = false) {
+		if(!empty($forceToArray)) {
+			$val = ArrayHelper::toArray($val);
+		}
+		if(class_exists('Yii')) {
+			self::varDump($val, $exit);
+		} else {
+			$content = '<pre style="font-size: 8pt;">' . print_r($val, 1) . '</pre>';
+			echo $content;
+			if($exit) {
+				exit;
+			}
+		}
+	}
+	
 	public static function varDump($val, $exit = false) {
 		if(APP == API) {
 			if(is_object(Yii::$app)) {

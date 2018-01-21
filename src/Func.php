@@ -1,13 +1,9 @@
 <?php
 
 use yii2lab\helpers\Debug;
-use yii\helpers\ArrayHelper;
 
 function prr($val, $exit = false, $forceToArray = false) {
-	if(!empty($forceToArray)) {
-		$val = ArrayHelper::toArray($val);
-	}
-	Debug::varDump($val, $exit);
+	Debug::prr($val, $exit, $forceToArray);
 }
 
 function mb_ucfirst ($word)
