@@ -50,6 +50,7 @@ class Helper {
 			$type = self::normalizeComponentConfig($type);
 			$object = new $type['class'];
 			self::configure($object, $params);
+			self::configure($object, $type);
 		}
 		if(!empty($interface)) {
 			self::checkInterface($object, $interface);
@@ -79,7 +80,7 @@ class Helper {
 		}
 		foreach ($properties as $name => $value) {
 			if($name != 'class') {
-				$object->$name = $value;
+				$object->{$name} = $value;
 			}
 		}
 		return $object;
