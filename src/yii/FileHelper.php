@@ -78,6 +78,14 @@ class FileHelper extends BaseFileHelper
 		return self::up(__DIR__, 5);
 	}
 	
+	public static function trimRootPath($path) {
+		if(!self::isAbsolute($path)) {
+			return $path;
+		}
+		$rootLen = strlen(self::rootPath());
+		return substr($path, $rootLen + 1);
+	}
+	
 	public static function up($dir, $level = 1) {
 		$dir = self::normalizePath($dir);
 		$dir = rtrim($dir, DIRECTORY_SEPARATOR);
