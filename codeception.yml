@@ -4,10 +4,10 @@ paths:
     data: tests/_data
     helpers: tests/_support
 settings:
-    bootstrap: _bootstrap.php
+    bootstrap: ../../../../yii2lab/yii2-test/src/base/_bootstrap.php
     colors: true
     memory_limit: 1024M
 modules:
     config:
         Yii2:
-            configFile: '../../yii2lab/yii2-app/src/loadConfig.php'
+            configFile: 'tests/_config/unit.php'
