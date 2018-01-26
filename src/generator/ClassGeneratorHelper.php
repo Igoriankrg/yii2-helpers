@@ -25,8 +25,11 @@ class ClassGeneratorHelper {
 	}
 	
 	private static function generateCode($data) {
-		$namespace = trim($data['dirAlias'], '@/\\');
-		$namespace = str_replace('/', '\\', $namespace);
+		if(!array_key_exists('namespace', $data)) {
+			$data['namespace'] = trim($data['dirAlias'], '@/\\');
+		}
+		$data['namespace'] = str_replace('/', '\\', $data['namespace']);
+		$namespace = !empty($data['namespace']) ? "namespace {$data['namespace']};" : EMP;
 		
 		$data['code'] = ArrayHelper::getValue($data, 'code');
 		$data['const'] = ArrayHelper::getValue($data, 'const');
@@ -50,6 +53,7 @@ class ClassGeneratorHelper {
 		$code = str_replace('{code}', $data['code'], $code);
 		$code = str_replace('{className}', $data['baseName'], $code);
 		$code = str_replace('{afterClassName}', !empty($data['afterClassName']) ? ' ' . $data['afterClassName'] : '', $code);
+		$code = str_replace('{package}', $data['namespace'], $code);
 		$code = str_replace('{namespace}', $namespace, $code);
 		return $code;
 	}
@@ -98,12 +102,12 @@ class ClassGeneratorHelper {
 	
 	private static function getClassCodeTemplate() {
 		$code = <<<'CODE'
-namespace {namespace};
+{namespace}
 {use}
 /**
  * Class {className}
  * {doc}
- * @package {namespace}
+ * @package {package}
  */
 class {className}{afterClassName} {
 {code}
