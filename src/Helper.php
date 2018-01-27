@@ -8,7 +8,29 @@ use yii\web\ServerErrorHttpException;
 use yii2lab\helpers\yii\FileHelper;
 
 class Helper {
-
+	
+	public static function getInstanceOfClassName($class, $classname) {
+		$class = self::getClassName($class, $classname);
+		if(empty($class)) {
+			return null;
+		}
+		if(class_exists($class)) {
+			return new $class();
+		}
+		return null;
+	}
+	
+	public static function getNamespaceOfClassName($class) {
+		$lastSlash = strrpos($class, '\\');
+		return substr($class, 0, $lastSlash);
+	}
+	
+	public static function extractNameFromClass($class, $type) {
+		$lastPos = strrpos($class, '\\');
+		$name = substr($class, $lastPos + 1, 0 - strlen($type));
+		return $name;
+	}
+	
 	public static function isEnabledComponent($config) {
 		if(!is_array($config)) {
 			return $config;

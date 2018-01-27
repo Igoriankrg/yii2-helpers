@@ -8,6 +8,14 @@ use yii\helpers\BaseFileHelper;
 class FileHelper extends BaseFileHelper
 {
 	
+	public static function dirLevelUp($class, $upLevel) {
+		$arr = explode('\\', $class);
+		for($i = 0; $i < $upLevel; $i++) {
+			$arr = array_splice($arr, 0, -1);
+		}
+		return implode('\\', $arr);
+	}
+	
 	public static function normalizeAlias($path) {
 		if(empty($path)) {
 			return $path;
