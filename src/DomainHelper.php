@@ -4,10 +4,15 @@ namespace yii2lab\helpers;
 
 use Yii;
 use yii2lab\app\domain\Domain;
+use yii2lab\domain\BaseEntity;
 use yii2lab\helpers\yii\ArrayHelper;
 
 class DomainHelper
 {
+	
+	public static function isEntity($data) {
+		return is_object($data) && $data instanceof BaseEntity;
+	}
 	
 	public static function has($name) {
 		if(!Yii::$app->has($name)) {
