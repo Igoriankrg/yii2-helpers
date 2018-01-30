@@ -152,7 +152,11 @@ class MenuHelper
 		if(empty($menu['url'])) {
 			return null;
 		}
-		$currentUrl = Url::to();
+		if(APP == CONSOLE) {
+			$currentUrl = '';
+		} else {
+			$currentUrl = Url::to();
+		}
 		$currentUrl = trim($currentUrl, SL);
 		$url = $menu['url'];
 		$url = trim($url, '/\\');
