@@ -1,5 +1,5 @@
 <?php
-namespace tests\unit;
+namespace tests\unit\helpers;
 
 use Codeception\Test\Unit;
 use yii2lab\helpers\Registry;
