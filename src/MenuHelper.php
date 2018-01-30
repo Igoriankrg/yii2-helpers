@@ -69,7 +69,14 @@ class MenuHelper
 		if(!class_exists($menu['class'])) {
 			return null;
 		}
-		return call_user_func([$menu['class'], 'getMenu']);
+		$menuEntity = Yii::createObject($menu);
+		if(method_exists($menuEntity, 'toArray')) {
+			$result = $menuEntity->toArray();
+		} elseif(method_exists($menuEntity, 'getMenu')) {
+			// todo: @deprecated
+			$result = $menuEntity->getMenu();
+		}
+		return $result;
 	}
 	
 	private static function genChilds($menu) {
