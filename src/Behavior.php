@@ -53,16 +53,19 @@ class Behavior {
 	}
 	
 	static function cors() {
-		$origin = [];
-		$urls = env('url');
-		foreach($urls as $url) {
-			$origin[] = trim($url, SL);
+		// todo: guide
+		$cors = param('cors.default', false);
+		if(!$cors) {
+			$cors = self::generate();
 		}
-		// todo: load from env.php
+		return $cors;
+	}
+	
+	private static function generate() {
 		return [
 			'class' => Cors::className(),
 			'cors' => [
-				'Origin' => $origin,
+				'Origin' => self::generateOriginFromEnvUrls(),
 				'Access-Control-Request-Method' => ['get', 'post', 'put', 'delete', 'options'],
 				'Access-Control-Request-Headers' => [
 					//'X-Wsse',
@@ -73,7 +76,6 @@ class Behavior {
 				],
 				//'Access-Control-Allow-Credentials' => true,
 				//'Access-Control-Max-Age' => 3600, // Allow OPTIONS caching
-				
 				'Access-Control-Expose-Headers' => [
 					'link',
 					'access-token',
@@ -85,6 +87,15 @@ class Behavior {
 				],
 			],
 		];
+	}
+	
+	private static function generateOriginFromEnvUrls() {
+		$origin = [];
+		$urls = env('url');
+		foreach($urls as $url) {
+			$origin[] = trim($url, SL);
+		}
+		return $origin;
 	}
 	
 }
