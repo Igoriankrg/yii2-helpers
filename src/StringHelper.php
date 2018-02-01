@@ -4,16 +4,23 @@ namespace yii2lab\helpers;
 
 class StringHelper {
 	
-	public static function search($content, $text) {
-		$text = self::extractWords($text);
-		$text = mb_strtolower($text);
-		$content = self::extractWords($content);
-		$content = mb_strtolower($content);
-		if(empty($text) || empty($content)) {
+	const PATTERN_SPACES = '#\s+#m';
+	
+	public static function search($haystack, $needle, $offset = 0) {
+		$needle = self::prepareTextForSearch($needle);
+		$haystack = self::prepareTextForSearch($haystack);
+		if(empty($needle) || empty($haystack)) {
 			return false;
 		}
-		$isExists = mb_strpos($content, $text) !== false;
+		$isExists = mb_strpos($haystack, $needle, $offset) !== false;
 		return $isExists;
+	}
+	
+	private static function prepareTextForSearch($text) {
+		$text = self::extractWords($text);
+		$text= mb_strtolower($text);
+		$text = self::removeAllSpace($text);
+		return $text;
 	}
 	
 	public static function getWordArray($content) {
@@ -35,12 +42,17 @@ class StringHelper {
 	}
 	
 	public static function textToLine($text) {
-		$text = preg_replace('#\s+#m', SPC, $text);
+		$text = preg_replace(self::PATTERN_SPACES, SPC, $text);
 		return $text;
 	}
 	
 	public static function removeDoubleSpace($text) {
-		$text = preg_replace('# +#m', SPC, $text);
+		$text = preg_replace(self::PATTERN_SPACES, SPC, $text);
+		return $text;
+	}
+	
+	public static function removeAllSpace($text) {
+		$text = preg_replace(self::PATTERN_SPACES, EMP, $text);
 		return $text;
 	}
 	
@@ -51,7 +63,7 @@ class StringHelper {
 	
 	public static function mask($value, $length = 2, $valueLength = null) {
 		if(empty($value)) {
-			return '';
+			return EMP;
 		}
 		$begin = substr($value, 0, $length);
 		$end = substr($value, 0 - $length);
