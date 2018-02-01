@@ -6,6 +6,11 @@ class StringHelper {
 	
 	const PATTERN_SPACES = '#\s+#m';
 	
+	public static function setTab($content, $tabCount) {
+		$content = str_replace(str_repeat(SPC, $tabCount), TAB, $content);
+		return $content;
+	}
+	
 	public static function search($haystack, $needle, $offset = 0) {
 		$needle = self::prepareTextForSearch($needle);
 		$haystack = self::prepareTextForSearch($haystack);
