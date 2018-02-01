@@ -10,7 +10,11 @@ class FileGeneratorHelper {
 	
 	public static function generate($data) {
 		$code = self::generateCode($data);
-		$fileName = Yii::getAlias($data['dirAlias'].'/'.$data['baseName'].'.php');
+		if(!empty($data['dirAlias']) && !empty($data['baseName'])) {
+			$fileName = Yii::getAlias($data['dirAlias'].'/'.$data['baseName'].'.php');
+		} elseif(!empty($data['fileName'])) {
+			$fileName = $data['fileName'];
+		}
 		FileHelper::save($fileName, $code);
 	}
 	
