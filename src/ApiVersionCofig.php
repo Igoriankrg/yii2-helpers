@@ -12,7 +12,7 @@ class ApiVersionCofig {
 	}
 	
 	static function load($name, $config) {
-		if(API_VERSION) {
+		if(defined('API_VERSION') && API_VERSION) {
 			$configFileName = self::configFileName($name);
 			$versionConfig = include($configFileName);
 			return ArrayHelper::merge($config, $versionConfig);
