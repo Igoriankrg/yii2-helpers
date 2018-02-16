@@ -43,7 +43,17 @@ class ModuleHelper
 		$modules = self::loadConfigFromApp($app);
 		return $modules;
 	}
-	
+
+    public static function getConfigByClassName($className, $app = null) {
+        $modules = self::loadConfigFromApp($app);
+        foreach($modules as $moduleId => $module) {
+            if(is_object($module) && $module instanceof $className) {
+                return self::getConfig($moduleId, $app);
+            }
+        }
+        return null;
+    }
+
 	public static function getConfig($name, $app = null) {
 		if(!empty($app) && $app != APP) {
 			$modules = self::loadConfigFromApp($app);
