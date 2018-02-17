@@ -142,6 +142,9 @@ class FileHelper extends BaseFileHelper
 	}
 	
 	public static function scanDir($dir, $options = null) {
+	    if(!self::has($dir)) {
+	        return [];
+        }
 		$pathes = scandir($dir);
 		ArrayHelper::removeByValue('.', $pathes);
 		ArrayHelper::removeByValue('..', $pathes);
