@@ -4,7 +4,7 @@ namespace tests\unit\helpers;
 use Codeception\Test\Unit;
 use yii2lab\helpers\MenuHelper;
 use yii2lab\test\helpers\DataHelper;
-use yii2module\account\domain\helpers\TestAuthHelper;
+use yii2module\account\domain\v1\helpers\TestAuthHelper;
 
 class MenuHelperTest extends Unit
 {

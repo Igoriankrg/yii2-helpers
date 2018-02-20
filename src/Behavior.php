@@ -6,7 +6,7 @@ use yii\filters\AccessControl;
 use yii\filters\Cors;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
-use yii2module\account\domain\filters\auth\HttpTokenAuth;
+use yii2module\account\domain\v1\filters\auth\HttpTokenAuth;
 
 class Behavior {
 	
