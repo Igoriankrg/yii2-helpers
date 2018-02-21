@@ -29,7 +29,7 @@ class MenuHelperTest extends Unit
 				'label' => ['lang/main', 'title'],
 				'url' => 'lang/manage',
 				'icon' => 'language',
-				'access' => 'lang.manage',
+				'access' => 'oLangManage',
 			],
 		];
 		
@@ -46,7 +46,7 @@ class MenuHelperTest extends Unit
 				'label' => ['lang/main', 'title'],
 				'url' => 'lang/manage',
 				'icon' => 'language',
-				'access' => 'lang.manage',
+				'access' => 'oLangManage',
 			],
 		];
 		
@@ -62,7 +62,7 @@ class MenuHelperTest extends Unit
 				'label' => ['lang/main', 'title'],
 				'url' => 'lang/manage',
 				'icon' => 'language',
-				'access' => 'lang.manage',
+				'access' => 'oLangManage',
 			],
 		];
 		

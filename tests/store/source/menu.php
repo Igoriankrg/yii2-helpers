@@ -28,7 +28,6 @@ return [
 	[
 		'label' => ['admin', 'rbac'],
 		//'module' => 'rbac',
-		//'access' => 'rbac.manage',
 		'icon' => 'user-o',
 		'items' => [
 			[
