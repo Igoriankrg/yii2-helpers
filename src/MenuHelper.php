@@ -11,7 +11,10 @@ use yii2lab\misc\enums\HtmlEnum;
 //TODO [nkl90]: протестировать класс!
 class MenuHelper
 {
-	
+
+    const DIVIDER = 'DIVIDER_ELEMENT';
+    const DIVIDER_HTML = '<li class="divider"></li>';
+
     public static function load($name, $key = null, $gen = false) {
         $menu = Helper::loadData($name, $key);
         if($gen) {
@@ -39,26 +42,75 @@ class MenuHelper
 		}
 		$result = [];
 		foreach($items as $index => $config) {
-			if(is_string($config)) {
-				$config = ['class' => $config];
-			}
 			$menu = self::genItem($config);
 			if(!empty($menu)) {
-				$result[] = $menu;
+			    $result[] = $menu;
 			}
 		}
+        $result = self::trimDivider($result);
 		return $result;
 	}
 
+    private static function trimDivider($items)
+    {
+        do {
+            $item = ArrayHelper::getValue($items, '0');
+            if($item == self::DIVIDER_HTML) {
+                unset($items[0]);
+                $items = array_values($items);
+            }
+        } while($item == self::DIVIDER_HTML);
+        do {
+            $index = count($items) - 1;
+            $item = ArrayHelper::getValue($items, $index);
+            if($item == self::DIVIDER_HTML) {
+                unset($items[$index]);
+                $items = array_values($items);
+            }
+        } while($item == self::DIVIDER_HTML);
+        return $items;
+    }
+
+    private static function isDivider($menu)
+    {
+        return ArrayHelper::getValue($menu, 'options.class') == 'divider' || $menu == self::DIVIDER;
+    }
+
+    private static function isItem($menu)
+    {
+        $isItem = array_key_exists('items', $menu) || array_key_exists('url', $menu) || array_key_exists('js', $menu);
+        return $isItem;
+    }
+
+    private static function isEmptyItem($menu)
+    {
+        $isItem = self::isItem($menu);
+        $isEmpty = $isItem && empty($menu['items']) && empty($menu['url']) && empty($menu['js']);
+        return $isEmpty;
+    }
+
 	private static function genItem($menu)
 	{
-		if(!empty($menu['class'])) {
+
+        if(is_string($menu)) {
+            if(self::isDivider($menu)) {
+                return self::DIVIDER_HTML;
+            } else {
+                $menu = ['class' => $menu];
+            }
+        }
+
+	    if(!empty($menu['class'])) {
 			$menu = self::runClass($menu);
 		}
+        if(self::isEmptyItem($menu)) {
+            return false;
+        }
+
 		if(self::isHidden($menu)) {
 			return false;
 		}
-		$menu['label'] = self::translateLabel($menu);
+		$menu = self::translateLabel($menu);
 		if(self::isHeader($menu)) {
 			$menu['options'] = ['class' => 'header'];
 			return $menu;
@@ -104,11 +156,15 @@ class MenuHelper
 	
 	private static function translateLabel($menu)
 	{
+	    if(empty($menu['label'])) {
+	        return $menu;
+        }
 		$label = ArrayHelper::getValue($menu, 'label');
 		if(is_array($label)) {
 			$label = call_user_func_array('t', $label);
 		}
-		return $label;
+        $menu['label'] = $label;
+		return $menu;
 	}
 	
 	private static function genUrl($menu)
@@ -147,7 +203,7 @@ class MenuHelper
 	}
 	
 	private static function isHeader($menu) {
-		return !empty($menu['isHeader']);
+        return !self::isItem($menu) && !self::isDivider($menu);
 	}
 	
 	private static function isActive($menu) {
@@ -198,12 +254,7 @@ class MenuHelper
 		$key = 'components.' . $menu['domain'];
 		return config($key);
 	}
-	
-	/* private static function isUrl($menu)
-	{
-		return !empty($menu['url']) && !self::isJs($menu) && !self::isMenu($menu);
-	} */
-	
+
 	private static function isAllow($menu) {
 		if(empty($menu['access'])) {
 			return true;
