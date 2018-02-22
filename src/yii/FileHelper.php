@@ -4,9 +4,24 @@ namespace yii2lab\helpers\yii;
 
 use Yii;
 use yii\helpers\BaseFileHelper;
+use yii2lab\store\Store;
 
 class FileHelper extends BaseFileHelper
 {
+
+    public static function fileExt($name) {
+        $start = strrpos($name, DOT);
+        return substr($name, $start + 1);
+    }
+
+    public static function loadData($name, $key, $default = null) {
+        $ext = self::fileExt($name);
+        $store = new Store($ext);
+        $data = $store->load($name, $key);
+        $data = !empty($data) ? $data : $default;
+        return $data;
+    }
+
     static function getPath($name) {
         if(self::isAlias($name)) {
             $name = str_replace('\\', '/', $name);

@@ -3,17 +3,13 @@
 namespace yii2lab\helpers;
 
 use Yii;
-use yii\helpers\ArrayHelper;
 use yii2lab\helpers\yii\FileHelper;
 
 class Helper {
 
     public static function loadData($name, $key = null) {
-        $data = include(COMMON_DATA_DIR . DS . $name . '.php');
-        $data = !empty($data) ? $data : [];
-        if(!empty($key)) {
-            return ArrayHelper::getValue($data, $key);
-        }
+        $file = COMMON_DATA_DIR . DS . $name . '.php';
+        $data = FileHelper::loadData($file, $key, []);
         return $data;
     }
 
