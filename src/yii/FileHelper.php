@@ -7,7 +7,15 @@ use yii\helpers\BaseFileHelper;
 
 class FileHelper extends BaseFileHelper
 {
-	
+    static function getPath($name) {
+        if(self::isAlias($name)) {
+            $name = str_replace('\\', '/', $name);
+            return Yii::getAlias($name);
+        } else {
+            return ROOT_DIR . DS . $name;
+        }
+    }
+
 	public static function dirLevelUp($class, $upLevel) {
 		$arr = explode('\\', $class);
 		for($i = 0; $i < $upLevel; $i++) {

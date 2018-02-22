@@ -82,5 +82,48 @@ class StringHelper {
 		$text = trim($text);
 		return $text;
 	}
-	
+
+    static function generateRandomString($length = 8,$set=null,$set_characters=null,$hight_quality=false) {
+        if(empty($set) && empty($set_characters)) {
+            $set = 'num|lower|upper';
+        }
+        $characters = '';
+        $arr = explode('|',$set);
+        if(in_array('num',$arr)) {
+            $characters .= '0123456789';
+        }
+        if(in_array('lower',$arr)) {
+            $characters .= 'abcdefghijklmnopqrstuvwxyz';
+        }
+        if(in_array('upper',$arr)) {
+            $characters .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        }
+        if(in_array('char',$arr)) {
+            $characters .= '~!@#$^&*`_-=*/+%!?.,:;\'"\\|{}[]<>()';
+        }
+        if(!empty($set_characters)) {
+            $characters .= $set_characters;
+        }
+        $randstring = '';
+        if($hight_quality) {
+            $char_arr = array();
+            $characters_len = mb_strlen($characters,'utf-8');
+        }
+        for($i = 0; $i < $length; $i++) {
+            $r = mt_rand(0,strlen($characters)-1);
+            if($hight_quality) {
+                if(in_array($r,$char_arr)) {
+                    while(in_array($r,$char_arr)) {
+                        $r = mt_rand(0,strlen($characters)-1);
+                    }
+                }
+                $char_arr[] = $r;
+                if(count($char_arr) >= $characters_len) {
+                    $char_arr = array();
+                }
+            }
+            $randstring .= $characters[$r];
+        }
+        return $randstring;
+    }
 }

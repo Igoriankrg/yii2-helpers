@@ -88,7 +88,7 @@ class ModuleHelper
 		if(property_exists($moduleClass, 'langDir') && !empty($moduleClass::$langDir)) {
 			return $moduleClass::$langDir;
 		}
-		$path = Helper::getNamespace($moduleClass);
+		$path = ClassHelper::getNamespace($moduleClass);
 		if(empty($path)) {
 			return null;
 		}

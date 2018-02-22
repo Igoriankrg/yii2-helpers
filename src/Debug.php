@@ -5,6 +5,7 @@ namespace yii2lab\helpers;
 use Yii;
 use yii2lab\helpers\yii\ArrayHelper;
 use yii\bootstrap\BootstrapAsset;
+use yii2lab\helpers\yii\Html;
 use yii2lab\store\Store;
 
 class Debug {
@@ -39,7 +40,7 @@ class Debug {
 				exit;
 			}
 		}
-		$val = self::recursiveHtmlentities($val);
+		$val = Html::recursiveHtmlEntities($val);
 		$store = new Store('php');
 		$content = $store->encode($val);
 		if(APP != CONSOLE && APP != API) {
@@ -64,24 +65,6 @@ class Debug {
 		echo $content;
 		Page::endDraw();
 		exit;
-	}
-	
-	private static function recursiveHtmlentities($val) {
-		if(is_object($val)) {
-			$val = (array) $val;
-		}
-		if(is_array($val)) {
-			$closure = function($v) {
-				if( ! is_array($v) && ! is_object($v)) {
-					$v = htmlentities($v);
-				}
-				return $v;
-			};
-			$val = ArrayHelper::recursiveIterator($val, $closure);
-		} else {
-			$val = htmlentities($val);
-		}
-		return $val;
 	}
 
 }

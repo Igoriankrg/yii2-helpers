@@ -3,6 +3,7 @@
 namespace yii2lab\helpers;
 
 use Yii;
+use yii2lab\helpers\yii\FileHelper;
 use yii2lab\helpers\yii\Html;
 
 class Page {
@@ -31,7 +32,7 @@ class Page {
 	}
 	
 	static function snippet($name, $from = null, $vars = []) {
-		if(Helper::isAlias($name)) {
+		if(FileHelper::isAlias($name)) {
 			$fileName = $name;
         } else {
 			$from = !empty($from) ? $from : '@app';
