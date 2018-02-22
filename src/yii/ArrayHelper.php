@@ -5,7 +5,23 @@ namespace yii2lab\helpers\yii;
 use yii\helpers\ArrayHelper as YiiArrayHelper;
 
 class ArrayHelper extends YiiArrayHelper {
-	
+
+    /**
+     * @param array $array
+     * @param string|\Closure $key
+     * @param mixed $default
+     * @return array
+     */
+    public static function group($array, $key, $default = null)
+    {
+        $result = [];
+        foreach ($array as $k => $element) {
+            $result[static::getValue($element, $key, $default)][$k] = $element;
+        }
+
+        return $result;
+    }
+
 	static function inArrayKey($value, $array, $default = null)
 	{
 		if(!array_key_exists($value, $array)) {
