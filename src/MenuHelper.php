@@ -12,6 +12,14 @@ use yii2lab\misc\enums\HtmlEnum;
 class MenuHelper
 {
 	
+    public static function load($name, $key = null, $gen = false) {
+        $menu = Helper::loadData($name, $key);
+        if($gen) {
+            $menu = MenuHelper::gen($menu);
+        }
+        return $menu;
+    }
+
 	public static function renderMenu($items, $glue = HtmlEnum::PIPE) {
 		$menuArr = [];
 		foreach($items as $item) {

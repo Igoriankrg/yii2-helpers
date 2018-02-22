@@ -4,11 +4,21 @@ namespace yii2lab\helpers;
 
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\helpers\ArrayHelper;
 use yii\web\ServerErrorHttpException;
 use yii2lab\helpers\yii\FileHelper;
 
 class Helper {
 	
+    public static function loadData($name, $key = null) {
+        $data = include(COMMON_DATA_DIR . DS . $name . '.php');
+        $data = !empty($data) ? $data : [];
+        if(!empty($key)) {
+            return ArrayHelper::getValue($data, $key);
+        }
+        return $data;
+    }
+
 	public static function getInstanceOfClassName($class, $classname) {
 		$class = self::getClassName($class, $classname);
 		if(empty($class)) {
