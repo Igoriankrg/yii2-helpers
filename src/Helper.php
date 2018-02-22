@@ -9,7 +9,43 @@ use yii\web\ServerErrorHttpException;
 use yii2lab\helpers\yii\FileHelper;
 
 class Helper {
-	
+
+    public static function defineFont($font, $path, $extList = ['ttf']) {
+        $typesCss = '';
+        foreach($extList as $ext) {
+            if($ext == 'eot') {
+                $typesCss .= '
+                    src: url("'.$path.'.eot");
+                    src: url("'.$path.'.eot?#iefix")format("embedded-opentype"),';
+            }
+            if($ext == 'woff') {
+                $typesCss .= '
+                    url("'.$path.'.woff") format("woff"),';
+            }
+            if($ext == 'ttf') {
+                $typesCss .= '
+                    url("'.$path.'.ttf") format("truetype")';
+            }
+        }
+        $css = '
+            @font-face {
+                font-family: "'.$font.'";
+                '.$typesCss.';
+            }
+        ';
+        Yii::$app->view->registerCss($css);
+    }
+
+    public static function setFont($fontName) {
+        $css = '
+            html, body, h1, h2, h3, h4, h5, h6
+            {
+                font-family: \''.$fontName.'\';
+            }
+        ';
+        Yii::$app->view->registerCss($css);
+    }
+
     public static function loadData($name, $key = null) {
         $data = include(COMMON_DATA_DIR . DS . $name . '.php');
         $data = !empty($data) ? $data : [];
