@@ -16,7 +16,7 @@ class Behavior {
 	
 	static function apiAuth($only = null) {
 		$config = [
-			'class' => HttpTokenAuth::className(),
+			'class' => HttpTokenAuth::class,
 		];
 		if(!empty($only)) {
 			$config['only'] = ArrayHelper::toArray($only);
@@ -29,7 +29,7 @@ class Behavior {
 			$actionMethods = ArrayHelper::toArray($actionMethods);
 		}
 		$config = [
-			'class' => VerbFilter::className(),
+			'class' => VerbFilter::class,
 			'actions' => $actions,
 		];
 		return $config;
@@ -38,7 +38,7 @@ class Behavior {
 	static function access($roles, $only = null, $allow = true) {
 		$roles = is_array($roles) ? $roles : [$roles];
 		$config = [
-			'class' => AccessControl::className(),
+			'class' => AccessControl::class,
 			'rules' => [
 				[
 					'allow' => $allow,
@@ -63,7 +63,7 @@ class Behavior {
 	
 	private static function generate() {
 		return [
-			'class' => Cors::className(),
+			'class' => Cors::class,
 			'cors' => [
 				'Origin' => self::generateOriginFromEnvUrls(),
 				'Access-Control-Request-Method' => ['get', 'post', 'put', 'delete', 'options'],
