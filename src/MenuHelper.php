@@ -5,6 +5,7 @@ namespace yii2lab\helpers;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii2lab\helpers\interfaces\MenuInterface;
 use yii2lab\helpers\yii\ArrayHelper;
 use yii2lab\misc\enums\HtmlEnum;
 
@@ -130,11 +131,9 @@ class MenuHelper
 			return null;
 		}
 		$menuEntity = Yii::createObject($menu);
-		if(method_exists($menuEntity, 'toArray')) {
+        $result = false;
+        if($menuEntity instanceof MenuInterface) {
 			$result = $menuEntity->toArray();
-		} elseif(method_exists($menuEntity, 'getMenu')) {
-			// todo: @deprecated
-			$result = $menuEntity->getMenu();
 		}
 		return $result;
 	}
