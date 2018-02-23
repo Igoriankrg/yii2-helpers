@@ -229,29 +229,20 @@ class MenuHelper
 		}
 		return strpos($currentUrl, $url) !== false;
 	}
-	
-	private static function isJs($menu) {
-		return strpos($menu['url'], 'javascript:') !== false;
-	}
-	
-	private static function isMenu($menu) {
-		return $menu['url'] == '#';
-	}
-	
+
 	private static function isHasModule($menu) {
-		if(empty($menu['module'])) {
+
+        if(empty($menu['module'])) {
 			return true;
 		}
-		$key = 'modules.' . $menu['module'];
-		return config($key);
+        return ModuleHelper::has($menu['module']);
 	}
-	
+
 	private static function isHasDomain($menu) {
 		if(empty($menu['domain'])) {
 			return true;
 		}
-		$key = 'components.' . $menu['domain'];
-		return config($key);
+		return ModuleHelper::has($menu['module']);
 	}
 
 	private static function isAllow($menu) {
