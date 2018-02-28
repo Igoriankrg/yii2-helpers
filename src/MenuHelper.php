@@ -85,7 +85,10 @@ class MenuHelper
 
     private static function isEmptyItem($menu)
     {
-        $isItem = self::isItem($menu);
+    	if(empty($menu)) {
+    		return true;
+	    }
+    	$isItem = self::isItem($menu);
         $isEmpty = $isItem && empty($menu['items']) && empty($menu['url']) && empty($menu['js']);
         return $isEmpty;
     }
