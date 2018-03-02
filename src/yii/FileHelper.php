@@ -64,7 +64,7 @@ class FileHelper extends BaseFileHelper
 	}
 	
 	public static function getAlias($path) {
-		$path = ltrim($path, '/\\');
+		//$path = ltrim($path, '/\\');
 		if(self::isAlias($path)) {
 			$path = self::normalizeAlias($path);
 			$dir = Yii::getAlias($path);
