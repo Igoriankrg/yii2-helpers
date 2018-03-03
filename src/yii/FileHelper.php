@@ -14,6 +14,11 @@ class FileHelper extends BaseFileHelper
         return substr($name, $start + 1);
     }
 
+    public static function fileRemoveExt($name) {
+        $start = strrpos($name, DOT);
+        return substr($name, 0, $start);
+    }
+
     public static function loadData($name, $key, $default = null) {
         $ext = self::fileExt($name);
         $store = new Store($ext);
