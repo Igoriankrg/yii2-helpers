@@ -2,8 +2,11 @@
 
 namespace yii2lab\helpers;
 
-class Registry extends BaseRegistry {
-	
-	protected static $data = [];
-	
+/**
+ * Class Registry
+ *
+ * @package yii2lab\helpers
+ * @deprecated use \yii2lab\extension\registry\helpers\Registry
+ */
+class Registry extends \yii2lab\extension\registry\helpers\Registry {
 }
