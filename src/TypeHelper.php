@@ -20,8 +20,10 @@ class TypeHelper {
 	}
 	
 	private static function entityToArray($entity) {
-		if(method_exists($entity, 'toArray')) {
-			$item = method_exists($entity, 'toArrayRaw') ? $entity->toArrayRaw() : $entity->toArray();
+		if(method_exists($entity, 'toArrayRaw')) {
+			$item = $entity->toArrayRaw();
+		} elseif(method_exists($entity, 'toArray')) {
+			$item = $entity->toArray();
 		} else {
 			$item = ArrayHelper::toArray($entity);
 		}
