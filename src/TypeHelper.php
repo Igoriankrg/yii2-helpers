@@ -3,15 +3,37 @@
 namespace yii2lab\helpers;
 
 use yii\helpers\ArrayHelper;
+use yii2lab\domain\values\BaseValue;
+use yii2lab\domain\values\TimeValue;
 
 class TypeHelper {
 	
 	private static $instance;
 	
-	public static function serialize($item, $formatMap) {
-		if(empty($formatMap)) {
-			return $item;
+	private static function decodeValueObject($value) {
+		if($value instanceof TimeValue) {
+			$value = $value->getInFormat(TimeValue::FORMAT_API);
+		} elseif($value instanceof BaseValue) {
+			$value = $value->get();
 		}
+		return $value;
+	}
+	
+	private static function entityToArray($entity) {
+		if(method_exists($entity, 'toArray')) {
+			$item = method_exists($entity, 'toArrayRaw') ? $entity->toArrayRaw() : $entity->toArray();
+		} else {
+			$item = ArrayHelper::toArray($entity);
+		}
+		foreach($item as $fieldName => $value) {
+			if($value instanceof BaseValue) {
+				$item[ $fieldName ] = self::decodeValueObject($value);
+			}
+		}
+		return $item;
+	}
+	
+	private static function normalizeItemTypes($item, $formatMap) {
 		foreach($formatMap as $fieldName => $format) {
 			if(is_array($format)) {
 				if(isset($item[ $fieldName ])) {
@@ -35,6 +57,14 @@ class TypeHelper {
 			} else {
 				$item[ $fieldName ] = self::encode($item[ $fieldName ], $format);
 			}
+		}
+		return $item;
+	}
+	
+	public static function serialize($entity, $formatMap) {
+		$item = self::entityToArray($entity);
+		if(!empty($formatMap)) {
+			$item = self::normalizeItemTypes($item, $formatMap);
 		}
 		return $item;
 	}
@@ -66,31 +96,6 @@ class TypeHelper {
 			self::$instance = new static;
 		}
 		return self::$instance;
-	}
-	
-	private function typeTime($value, $param) {
-		if(empty($value)) {
-			return null;
-		}
-		//return $value;
-		/* if(!is_numeric($value)) {
-			$value = str_replace(['Z', 'O'], '', $value);
-			$value = str_replace('T', ' ', $value);
-		}
-		$value = Yii::$app->formatter->asDateTime($value);
-		return $value; */
-		//if($param == 'api') {
-		$mask = 'Y-m-d\TH:i:s\Z';
-		//} else {
-		//	$mask = 'Y-m-d H:i:s';
-		//}
-		if(is_numeric($value)) {
-			$value = date('Y-m-d H:i:s', $value);
-		}
-		
-		$datetime = new \DateTime($value);
-		$value = $datetime->format($mask);
-		return $value;
 	}
 	
 	private function typeInteger($value, $param) {
