@@ -3,6 +3,7 @@
 namespace yii2lab\helpers;
 
 use yii\helpers\ArrayHelper;
+use yii2lab\domain\BaseEntity;
 use yii2lab\domain\values\BaseValue;
 use yii2lab\domain\values\TimeValue;
 
@@ -30,6 +31,10 @@ class TypeHelper {
 		foreach($item as $fieldName => $value) {
 			if($value instanceof BaseValue) {
 				$item[ $fieldName ] = self::decodeValueObject($value);
+			}
+			$pureValue = $entity->{$fieldName};
+			if($pureValue instanceof BaseEntity) {
+				$item[ $fieldName ] = self::entityToArray($pureValue);
 			}
 		}
 		return $item;
