@@ -24,7 +24,7 @@ class ClassGeneratorHelper {
 		FileGeneratorHelper::generate($data);
 	}
 	
-	private static function generateCode($data) {
+	public static function generateCode($data) {
 		if(!array_key_exists('namespace', $data)) {
 			$data['namespace'] = trim($data['dirAlias'], '@/\\');
 		}
