@@ -10,16 +10,24 @@ class FileHelper extends BaseFileHelper
 {
 
     public static function fileExt($name) {
-        $start = strrpos($name, DOT);
-        return substr($name, $start + 1);
+    	$baseName = basename($name);
+        $start = strrpos($baseName, DOT);
+        if($start) {
+	        return substr($baseName, $start + 1);
+        }
+        return null;
     }
 
     public static function fileRemoveExt($name) {
-        $start = strrpos($name, DOT);
-        return substr($name, 0, $start);
+	    $baseName = basename($name);
+	    $start = strrpos($baseName, DOT);
+	    if($start) {
+		    return substr($name, 0, 0 - $start + 1);
+	    }
+	    return $name;
     }
 
-    public static function loadData($name, $key, $default = null) {
+    public static function loadData($name, $key = null, $default = null) {
         $ext = self::fileExt($name);
         $store = new Store($ext);
         $data = $store->load($name, $key);
@@ -30,14 +38,21 @@ class FileHelper extends BaseFileHelper
     static function getPath($name) {
         if(self::isAlias($name)) {
             $name = str_replace('\\', '/', $name);
-            return Yii::getAlias($name);
+	        $fileName = Yii::getAlias($name);
         } else {
-            return ROOT_DIR . DS . $name;
+	        if(self::isAbsolute($name)) {
+		        $fileName = $name;
+	        } else {
+		        $fileName = ROOT_DIR . DS . $name;
+	        }
         }
+	    $fileName = self::normalizePath($fileName);
+	    return $fileName;
     }
 
-	public static function dirLevelUp($class, $upLevel) {
-		$arr = explode('\\', $class);
+	public static function dirLevelUp($class, $upLevel = 1) {
+		$class = self::normalizePath($class);
+		$arr = explode(DS, $class);
 		for($i = 0; $i < $upLevel; $i++) {
 			$arr = array_splice($arr, 0, -1);
 		}
@@ -56,12 +71,11 @@ class FileHelper extends BaseFileHelper
 	}
 	
 	public static function pathToAbsolute($path) {
-		if(strpos($path, ROOT_DIR) === false) {
-			$dir = ROOT_DIR . DS . $path;
-		} else {
-			$dir = $path;
+		$path = self::normalizePath($path);
+		if(self::isAbsolute($path)) {
+		    return $path;
 		}
-		return $dir;
+		return ROOT_DIR . DS . $path;
 	}
 	
 	public static function isAlias($path) {
@@ -69,7 +83,6 @@ class FileHelper extends BaseFileHelper
 	}
 	
 	public static function getAlias($path) {
-		//$path = ltrim($path, '/\\');
 		if(self::isAlias($path)) {
 			$path = self::normalizeAlias($path);
 			$dir = Yii::getAlias($path);
@@ -95,11 +108,12 @@ class FileHelper extends BaseFileHelper
 	}
 	
 	public static function remove($path) {
-		if(is_dir($path)) {
-			FileHelper::removeDirectory(ROOT_DIR . DS . $path);
+		$path = self::pathToAbsolute($path);
+    	if(is_dir($path)) {
+			FileHelper::removeDirectory($path);
 			return true;
 		} elseif(is_file($path)) {
-			unlink(ROOT_DIR . DS . $path);
+			unlink($path);
 			return true;
 		}
 		return false;
@@ -189,21 +203,19 @@ class FileHelper extends BaseFileHelper
 		return $result;
 	}
 	
-	public static function dirFromTime($level=3,$time=null) {
-		if(empty($time)) $time = TIMESTAMP;
+	public static function dirFromTime($level=3,$time=TIMESTAMP) {
 		if($level >= 1) $format[] = 'Y';
 		if($level >= 2) $format[] = 'm';
 		if($level >= 3) $format[] = 'd';
 		if($level >= 4) $format[] = 'H';
 		if($level >= 5) $format[] = 'i';
 		if($level >= 6) $format[] = 's';
-		$name = date(implode('/',$format));
+		$name = date(implode('/',$format), $time);
 		$name = self::normalizePath($name);
 		return $name;
 	}
 
-	public static function fileFromTime($level=5,$time=null,$delimiter='.',$delimiter2='_') {
-		if(empty($time)) $time = TIMESTAMP;
+	public static function fileFromTime($level=5,$time=TIMESTAMP,$delimiter='.',$delimiter2='_') {
 		$format = '';
 		if($level >= 1) $format .= 'Y';
 		if($level >= 2) $format .= $delimiter.'m';
@@ -211,7 +223,7 @@ class FileHelper extends BaseFileHelper
 		if($level >= 4) $format .= $delimiter2.'H';
 		if($level >= 5) $format .= $delimiter.'i';
 		if($level >= 6) $format .= $delimiter.'s';
-		$name = date($format);
+		$name = date($format, $time);
 		return $name;
 	}
 	
