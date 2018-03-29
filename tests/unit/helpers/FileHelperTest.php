@@ -27,6 +27,9 @@ class FileHelperTest extends Unit
 		
 		$ext = FileHelper::fileRemoveExt($fileNameWithOutExt);
 		expect($ext)->equals($fileNameWithOutExt);
+		
+		$ext = FileHelper::fileRemoveExt('index.php');
+		expect($ext)->equals('index');
 	}
 	
 	public function testLoadData()

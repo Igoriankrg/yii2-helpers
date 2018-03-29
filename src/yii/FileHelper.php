@@ -10,6 +10,7 @@ class FileHelper extends BaseFileHelper
 {
 
     public static function fileExt($name) {
+    	$name = trim($name);
     	$baseName = basename($name);
         $start = strrpos($baseName, DOT);
         if($start) {
@@ -19,10 +20,10 @@ class FileHelper extends BaseFileHelper
     }
 
     public static function fileRemoveExt($name) {
-	    $baseName = basename($name);
-	    $start = strrpos($baseName, DOT);
-	    if($start) {
-		    return substr($name, 0, 0 - $start + 1);
+    	$ext = self::fileExt($name);
+	    $extLen = strlen($ext);
+	    if($extLen) {
+		    return substr($name, 0, 0 - $extLen - 1);
 	    }
 	    return $name;
     }
