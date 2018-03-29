@@ -3,7 +3,6 @@
 namespace yii2lab\helpers;
 
 use yii\filters\AccessControl;
-use yii\filters\Cors;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii2module\account\domain\v2\filters\auth\HttpTokenAuth;
@@ -56,46 +55,9 @@ class Behavior {
 		// todo: guide
 		$cors = param('cors.default', false);
 		if(!$cors) {
-			$cors = self::generate();
+			$cors = CorsHelper::generate();
 		}
 		return $cors;
-	}
-	
-	private static function generate() {
-		return [
-			'class' => Cors::class,
-			'cors' => [
-				'Origin' => self::generateOriginFromEnvUrls(),
-				'Access-Control-Request-Method' => ['get', 'post', 'put', 'delete', 'options'],
-				'Access-Control-Request-Headers' => [
-					//'X-Wsse',
-					'content-type',
-					'x-requested-with',
-					'authorization',
-					'registration-token',
-				],
-				//'Access-Control-Allow-Credentials' => true,
-				//'Access-Control-Max-Age' => 3600, // Allow OPTIONS caching
-				'Access-Control-Expose-Headers' => [
-					'link',
-					'access-token',
-					'authorization',
-					'x-pagination-total-count',
-					'x-pagination-page-count',
-					'x-pagination-current-page',
-					'x-pagination-per-page',
-				],
-			],
-		];
-	}
-	
-	private static function generateOriginFromEnvUrls() {
-		$origin = [];
-		$urls = env('url');
-		foreach($urls as $url) {
-			$origin[] = trim($url, SL);
-		}
-		return $origin;
 	}
 	
 }
