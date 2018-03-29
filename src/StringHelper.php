@@ -126,4 +126,8 @@ class StringHelper {
         }
         return $randstring;
     }
+    
+    public static function isSha1($string) {
+		return preg_match('/[0-9a-f]{40}/i', $string);
+    }
 }
