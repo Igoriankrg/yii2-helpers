@@ -15,6 +15,11 @@ class TempHelper {
 		FileHelper::remove($fileName);
 	}
 	
+	public static function save($name, $content) {
+		$fileName = self::fullName($name);
+		FileHelper::save($fileName, $content);
+	}
+	
 	public static function fullName($name) {
 		$fileName = self::basePath($name);
 		self::createDirectoryForFile($fileName);
