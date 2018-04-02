@@ -270,13 +270,11 @@ class FileHelperTest extends Unit
 	{
 		$pathList = [
 			'\\ggg////////rrr',
-			ROOT_DIR . DS . '\\///\\//ggg/rrr',
 		];
 		
 		$result = FileHelper::normalizePathList($pathList);
 		expect($result)->equals([
-			'\\ggg\\rrr',
-			'C:\\OpenServer\\domains\\yii\\demo\\ggg\\rrr',
+			'\ggg\\rrr',
 		]);
 	}
 	
