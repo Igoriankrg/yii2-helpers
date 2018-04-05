@@ -14,6 +14,10 @@ class DomainHelper
 		return is_object($data) && $data instanceof BaseEntity;
 	}
 	
+	public static function isCollection($data) {
+		return is_array($data);
+	}
+	
 	public static function has($name) {
 		if(!Yii::$app->has($name)) {
 			return false;
