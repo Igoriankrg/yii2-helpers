@@ -3,12 +3,39 @@
 namespace yii2lab\helpers;
 
 use Yii;
-use yii2lab\app\domain\Domain;
 use yii2lab\domain\BaseEntity;
+use yii2lab\domain\Domain;
+use yii2lab\domain\helpers\ConfigHelper;
 use yii2lab\helpers\yii\ArrayHelper;
 
 class DomainHelper
 {
+	
+	public static function define($domainId, $definition) {
+		$definition = ConfigHelper::normalizeItemConfig($domainId, $definition);
+		if(!Yii::$domain->has($domainId)) {
+			Yii::$domain->set($domainId, $definition);
+		}
+	}
+	
+	public static function getClassConfig(string $domainId, $className, array $classDefinition = null) {
+		$definition = self::getConfigFromDomainClass($className);
+		$definition = ConfigHelper::normalizeItemConfig($domainId, $definition);
+		if(!empty($classDefinition)) {
+			$classDefinition =  ConfigHelper::normalizeItemConfig($domainId, $classDefinition);
+			$definition = ArrayHelper::merge($definition, $classDefinition);
+		}
+		$definition['class'] = $className;
+		return $definition;
+	}
+	
+	private static function getConfigFromDomainClass($className) {
+		$definition = ClassHelper::normalizeComponentConfig($className);
+		/** @var Domain $domain */
+		$domain = Yii::createObject($definition);
+		$config = $domain->config();
+		return $config;
+	}
 	
 	public static function isEntity($data) {
 		return is_object($data) && $data instanceof BaseEntity;
