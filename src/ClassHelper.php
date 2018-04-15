@@ -31,7 +31,7 @@ class ClassHelper {
     }
 
     /**
-     * @param       $type
+     * @param       $definition
      * @param array $params
      * @param null  $interface
      *
@@ -39,17 +39,17 @@ class ClassHelper {
      * @throws InvalidConfigException
      * @throws ServerErrorHttpException
      */
-    public static function createObject($type, array $params = [], $interface = null) {
-        if(empty($type)) {
+    public static function createObject($definition, array $params = [], $interface = null) {
+        if(empty($definition)) {
             throw new InvalidConfigException('Empty class config');
         }
         if(class_exists('Yii')) {
-            $object = Yii::createObject($type, $params);
+            $object = Yii::createObject($definition, $params);
         } else {
-            $type = self::normalizeComponentConfig($type);
-            $object = new $type['class'];
+            $definition = self::normalizeComponentConfig($definition);
+            $object = new $definition['class'];
             self::configure($object, $params);
-            self::configure($object, $type);
+            self::configure($object, $definition);
         }
         if(!empty($interface)) {
             self::checkInterface($object, $interface);
