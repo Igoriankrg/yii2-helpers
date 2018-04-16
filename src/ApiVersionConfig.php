@@ -22,7 +22,7 @@ class ApiVersionConfig {
 	}
 
     public static function defaultApiVersionNumber($default = null) {
-        return env('api.version.default', $default);
+        return env('api.defaultVersion', $default);
     }
 
     public static function defaultApiVersionSting($default = null) {
