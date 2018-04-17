@@ -38,7 +38,7 @@ class TempHelper {
 	}
 	
 	public static function basePath($path = null) {
-		$basePath = Yii::getAlias(self::TEMP_ALIAS) . DS . MICRO_TIME;
+		$basePath = Yii::getAlias(self::TEMP_ALIAS) . DS . YII_BEGIN_TIME;
 		if($path) {
 			$basePath .= DS . $path;
 		}
