@@ -5,7 +5,18 @@ namespace yii2lab\helpers\yii;
 use yii\helpers\ArrayHelper as YiiArrayHelper;
 
 class ArrayHelper extends YiiArrayHelper {
-
+	
+	public static function extractByKeys($array, $keys)
+	{
+		$result = [];
+		foreach ($keys as $key) {
+			if(isset($array[$key])) {
+				$result[$key] = $array[$key];
+			}
+		}
+		return $result;
+	}
+	
     /**
      * @param array $array
      * @param string|\Closure $key
