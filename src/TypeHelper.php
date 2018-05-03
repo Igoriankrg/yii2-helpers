@@ -32,7 +32,7 @@ class TypeHelper {
 			if($value instanceof BaseValue) {
 				$item[ $fieldName ] = self::decodeValueObject($value);
 			}
-			$pureValue = $entity->{$fieldName};
+			$pureValue = ArrayHelper::getValue($entity, $fieldName);
 			if($pureValue instanceof BaseEntity) {
 				$item[ $fieldName ] = self::entityToArray($pureValue);
 			}
