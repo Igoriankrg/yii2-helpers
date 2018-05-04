@@ -9,6 +9,12 @@ use yii2lab\domain\values\TimeValue;
 
 class TypeHelper {
 	
+	const INTEGER = 'integer';
+	const FLOAT = 'float';
+	const STRING = 'string';
+	const BOOLEAN = 'boolean';
+	const NULL = 'null';
+	
 	private static $instance;
 	
 	private static function decodeValueObject($value) {
