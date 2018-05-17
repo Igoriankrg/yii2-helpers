@@ -10,7 +10,8 @@ class ClientHelper
 	const IP_HEADER_KEY = 'ip_address';
 	
     public static function ip() {
-        if (APP == CONSOLE) {
+	    return '127.0.0.1';
+    	if (APP == CONSOLE) {
             return '127.0.0.1';
         }
        /* if ($_SERVER['REMOTE_ADDR'] == env('servers.nat.address') && isset($_SERVER['HTTP_CLIENT_IP'])) {
