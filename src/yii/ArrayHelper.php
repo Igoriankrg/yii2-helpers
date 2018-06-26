@@ -6,6 +6,20 @@ use yii\helpers\ArrayHelper as YiiArrayHelper;
 
 class ArrayHelper extends YiiArrayHelper {
 	
+	public static function itemsToInt($array)
+	{
+		return self::prepareItems($array, 'intval');
+	}
+	
+	public static function prepareItems($array, $function, $params = [])
+	{
+		$callback = function ($value) use ($function, $params) {
+			array_unshift($params, $value);
+			return call_user_func_array($function, $params);
+		};
+		return array_map($callback, $array);
+	}
+	
 	public static function extractByKeys($array, $keys)
 	{
 		$result = [];
