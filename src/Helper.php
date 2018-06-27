@@ -6,7 +6,17 @@ use Yii;
 use yii2lab\helpers\yii\FileHelper;
 
 class Helper {
-
+	
+	public static function getNotEmptyValue() {
+		$args = func_get_args();
+		foreach($args as $arg) {
+			if(!empty($arg)) {
+				return $arg;
+			}
+		}
+		return null;
+	}
+	
     public static function loadData($name, $key = null) {
         $file = COMMON_DATA_DIR . DS . $name . '.php';
         $data = FileHelper::loadData($file, $key, []);
