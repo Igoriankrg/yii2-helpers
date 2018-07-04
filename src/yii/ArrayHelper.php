@@ -20,11 +20,22 @@ class ArrayHelper extends YiiArrayHelper {
 		return array_map($callback, $array);
 	}
 	
+	public static function removeIfNull($array)
+	{
+		$result = [];
+		foreach ($array as $key => $value) {
+			if(!is_null($value)) {
+				$result[$key] = $value;
+			}
+		}
+		return $result;
+	}
+	
 	public static function extractByKeys($array, $keys)
 	{
 		$result = [];
 		foreach ($keys as $key) {
-			if(isset($array[$key])) {
+			if(array_key_exists($key, $array)) {
 				$result[$key] = $array[$key];
 			}
 		}
