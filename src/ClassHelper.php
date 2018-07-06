@@ -104,15 +104,26 @@ class ClassHelper {
     }
 
     static function normalizeComponentListConfig($config) {
-        foreach($config as &$item) {
-            $item = self::normalizeComponentConfig($item);
+    	if(empty($config)) {
+    		return [];
+	    }
+	    $components = [];
+        foreach($config as $id => &$definition) {
+            $definition = self::normalizeComponentConfig($definition);
+	        if(self::isComponent($id, $definition)) {
+		        $components[$id] = $definition;
+	        }
         }
-        return $config;
+        return $components;
     }
-
+    
+    static function isComponent($id, $definition) {
+    	return PhpHelper::isValidName($id) && array_key_exists('class', $definition);
+    }
+    
     static function normalizeComponentConfig($config, $class = null) {
         if(empty($config) && empty($class)) {
-            return null;
+            return $config;
         }
         if(!empty($class)) {
             $config['class'] = $class;

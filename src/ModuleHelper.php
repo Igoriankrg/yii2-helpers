@@ -8,6 +8,17 @@ use yii2lab\helpers\yii\ArrayHelper;
 class ModuleHelper
 {
 	
+	public static function allModules() {
+		$modules = [];
+		foreach(config('modules') as $id => $definition) {
+			$definition = ClassHelper::normalizeComponentConfig($definition);
+			if(preg_match('#^[\w_]+$#i', $id) && array_key_exists('class', $definition)) {
+				$modules[$id] = $definition;
+			}
+		}
+		return $modules;
+	}
+	
 	public static function isActiveUrl($urlList) {
 		$urlList = ArrayHelper::toArray($urlList);
 		foreach($urlList as $url) {
@@ -95,10 +106,22 @@ class ModuleHelper
 		return Helper::getBundlePath($path . SL . 'messages');
 	}
 	
-	private static function loadConfigFromApp($app) {
+	public static function loadConfigFromApp($app) {
 		$appPath = Yii::getAlias('@' . $app);
 		$main = @include($appPath . DS . 'config' . DS . 'modules.php');
 		$local = @include($appPath . DS . 'config' . DS . 'modules-local.php');
-		return ArrayHelper::merge($main ?: [], $local ?: []);
+		$main = ClassHelper::normalizeComponentListConfig($main);
+		$local = ClassHelper::normalizeComponentListConfig($local);
+		$allModules = ArrayHelper::merge($main ?: [], $local ?: []);
+		return $allModules;
+	}
+	
+	public static function loadConfigFromAppTree(array $appNames = []) {
+		$result = ModuleHelper::loadConfigFromApp('common');
+		foreach($appNames as $appName) {
+			$appConfig = ModuleHelper::loadConfigFromApp($appName);
+			$result = ArrayHelper::merge($result ?: [], $appConfig ?: []);
+		}
+		return $result;
 	}
 }
