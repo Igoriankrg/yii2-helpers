@@ -3,11 +3,18 @@
 namespace yii2lab\helpers;
 
 use Yii;
+use yii2lab\domain\data\GetParams;
 
 class ClientHelper
 {
 
 	const IP_HEADER_KEY = 'ip_address';
+	
+	public static function getQueryFromRequest() {
+		$params = Yii::$app->request->get();
+		$getParams = new GetParams();
+		return $getParams->getAllParams($params);
+	}
 	
     public static function ip() {
 	    return '127.0.0.1';
