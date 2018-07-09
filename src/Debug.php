@@ -5,10 +5,40 @@ namespace yii2lab\helpers;
 use Yii;
 use yii2lab\helpers\yii\ArrayHelper;
 use yii\bootstrap\BootstrapAsset;
+use yii2lab\helpers\yii\FileHelper;
 use yii2lab\helpers\yii\Html;
 use yii2lab\store\Store;
 
 class Debug {
+	
+	private static $isLogged = false;
+	
+	public static function log($val) {
+		$url = Yii::$app->request->url;
+		if(!empty($url) && strpos($url, '/debug/') !== false) {
+			return null;
+		}
+		$file = Yii::getAlias('@runtime/logs/debug') . DS . date('Y-m-d', TIMESTAMP).'.log';
+		if(file_exists($file)) {
+			$log = FileHelper::load($file);
+		} else {
+			$log = '';
+		}
+		if(is_object($val)) {
+			$val = ArrayHelper::toArray($val);
+		}
+		$store = new Store('php');
+		$content = $store->encode($val);
+		if(self::$isLogged) {
+			$log .= PHP_EOL . PHP_EOL . ' ------ ' . PHP_EOL . PHP_EOL;
+		} else {
+			$spliter = SPC . str_repeat('=', 30) . SPC;
+			$log .= PHP_EOL . PHP_EOL . $spliter . date('H-i-s', TIMESTAMP) . $spliter . PHP_EOL . PHP_EOL;
+		}
+		$log .= $content;
+		FileHelper::save($file, $log);
+		self::$isLogged = true;
+	}
 	
 	public static function prr($val, $exit = false, $forceToArray = false) {
 		if(!empty($forceToArray)) {
