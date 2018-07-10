@@ -89,11 +89,15 @@ class Debug {
 			echo $content;
 			exit;
 		}
-		BootstrapAsset::register(Yii::$app->view);
-		Yii::$app->view->registerCss('body { margin: 20px; }');
-		Page::beginDraw();
-		echo $content;
-		Page::endDraw();
+		if(!empty(Yii::$app->view)) {
+			BootstrapAsset::register(Yii::$app->view);
+			Yii::$app->view->registerCss('body { margin: 20px; }');
+			Page::beginDraw();
+			echo $content;
+			Page::endDraw();
+		} else {
+			echo $content;
+		}
 		exit;
 	}
 
