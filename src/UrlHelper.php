@@ -2,9 +2,16 @@
 
 namespace yii2lab\helpers;
 
+use function GuzzleHttp\Psr7\parse_query;
 use yii\helpers\Url;
 
 class UrlHelper {
+	
+	public static function parse($url) {
+		$r = parse_url($url);
+		$r['query'] = parse_query($r['query']);
+		return $r;
+	}
 	
 	public static function currentDomain() {
 		return self::extractDomainFromUrl($_SERVER['HTTP_HOST']);
