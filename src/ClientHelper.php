@@ -9,29 +9,55 @@ class ClientHelper
 {
 
 	const IP_HEADER_KEY = 'ip_address';
+	const LOCALHOST_IP = '127.0.0.1';
 	
-	public static function getQueryFromRequest() {
-		$params = Yii::$app->request->get();
+	public static function getQueryFromRequest($queryParams = null) {
+		if($queryParams === null) {
+			$queryParams = Yii::$app->request->get();
+		}
 		$getParams = new GetParams();
-		return $getParams->getAllParams($params);
+		return $getParams->getAllParams($queryParams);
 	}
 	
     public static function ip() {
-	    return '127.0.0.1';
-    	if (APP == CONSOLE) {
-            return '127.0.0.1';
+    	if (self::isConsole()) {
+            return self::LOCALHOST_IP;
         }
-       /* if ($_SERVER['REMOTE_ADDR'] == env('servers.nat.address') && isset($_SERVER['HTTP_CLIENT_IP'])) {
-            $clientIp = $_SERVER['HTTP_CLIENT_IP'];
-        } else {
-            $clientIp = $_SERVER['REMOTE_ADDR'];
-        }*/
-	    $clientIp = Yii::$app->request->userIP;
-	    $headerIp = Yii::$app->request->headers->get(self::IP_HEADER_KEY, false);
-	    if($headerIp) {
-		    $clientIp = $headerIp;
+        $ip = self::getIpFromHeader();
+    	if($ip) {
+    		return $ip;
 	    }
-        return $clientIp;
+	    $ip = self::getIpFromRequest();
+	    if($ip) {
+		    return $ip;
+	    }
     }
-
+	
+	public static function getIpFromHeader() {
+		if (self::isConsole()) {
+			return self::LOCALHOST_IP;
+		}
+		$headerIp = Yii::$app->request->headers->get(self::IP_HEADER_KEY, false);
+		if($headerIp) {
+			$clientIp = $headerIp;
+		}
+		return $clientIp;
+	}
+ 
+	public static function getIpFromRequest() {
+		if (self::isConsole()) {
+			return self::LOCALHOST_IP;
+		}
+		/* if ($_SERVER['REMOTE_ADDR'] == env('servers.nat.address') && isset($_SERVER['HTTP_CLIENT_IP'])) {
+			 $clientIp = $_SERVER['HTTP_CLIENT_IP'];
+		 } else {
+			 $clientIp = $_SERVER['REMOTE_ADDR'];
+		 }*/
+		return Yii::$app->request->userIP;
+	}
+ 
+	private static function isConsole() {
+		//return true;
+		return APP == CONSOLE;
+	}
 }
