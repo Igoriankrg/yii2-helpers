@@ -33,15 +33,12 @@ class ClientHelper
 	    }
     }
 	
-	public static function getIpFromHeader() {
+	private static function getIpFromHeader() {
 		if (self::isConsole()) {
 			return self::LOCALHOST_IP;
 		}
-		$headerIp = Yii::$app->request->headers->get(self::IP_HEADER_KEY, false);
-		if($headerIp) {
-			$clientIp = $headerIp;
-		}
-		return $clientIp;
+		$ip = Yii::$app->request->headers->get(self::IP_HEADER_KEY, false);
+		return $ip;
 	}
  
 	public static function getIpFromRequest() {
