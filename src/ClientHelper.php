@@ -2,6 +2,7 @@
 
 namespace yii2lab\helpers;
 
+use InvalidArgumentException;
 use Yii;
 use yii2lab\domain\data\GetParams;
 use xj\ua\UserAgent;
@@ -13,7 +14,12 @@ class ClientHelper
 	const LOCALHOST_IP = '127.0.0.1';
 	
 	public static function getAgentInfo($isLowerCase = false) {
-		$userAgent = UserAgent::model();
+		try {
+			$userAgent = UserAgent::model();
+		} catch(InvalidArgumentException $e) {
+			return [];
+		}
+		
 		/* @var \xj\ua\UserAgent $userAgent */
 		$uaAttributes =  $userAgent->getAttributes();
 		if($isLowerCase) {
