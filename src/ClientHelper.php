@@ -4,12 +4,25 @@ namespace yii2lab\helpers;
 
 use Yii;
 use yii2lab\domain\data\GetParams;
+use xj\ua\UserAgent;
 
 class ClientHelper
 {
 
 	const IP_HEADER_KEY = 'ip_address';
 	const LOCALHOST_IP = '127.0.0.1';
+	
+	public static function getAgentInfo($isLowerCase = false) {
+		$userAgent = UserAgent::model();
+		/* @var \xj\ua\UserAgent $userAgent */
+		$uaAttributes =  $userAgent->getAttributes();
+		if($isLowerCase) {
+			foreach($uaAttributes as &$attribute) {
+				$attribute = strtolower($attribute);
+			}
+		}
+		return $uaAttributes;
+	}
 	
 	public static function getQueryFromRequest($queryParams = null) {
 		if($queryParams === null) {

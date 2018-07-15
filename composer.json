@@ -18,6 +18,7 @@
 	},
 	"require": {
 		"yiisoft/yii2": "*",
+		"xj/yii2-user-agent": "~1.0.0",
 		"php": ">=5.3.0"
 	}
 }
