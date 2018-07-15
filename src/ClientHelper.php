@@ -54,7 +54,7 @@ class ClientHelper
 	}
  
 	private static function isConsole() {
-		//return true;
+		return true;
 		return APP == CONSOLE;
 	}
 }
