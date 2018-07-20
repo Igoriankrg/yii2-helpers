@@ -21,11 +21,13 @@ class CorsHelper {
 					HttpHeaderEnum::CONTENT_TYPE,
 					HttpHeaderEnum::X_REQUESTED_WITH,
 					HttpHeaderEnum::AUTHORIZATION,
+					HttpHeaderEnum::TIME_ZONE,
 				],
 				'Access-Control-Expose-Headers' => [
 					HttpHeaderEnum::LINK,
 					HttpHeaderEnum::ACCESS_TOKEN,
 					HttpHeaderEnum::AUTHORIZATION,
+					HttpHeaderEnum::TIME_ZONE,
 					HttpHeaderEnum::TOTAL_COUNT,
 					HttpHeaderEnum::PAGE_COUNT,
 					HttpHeaderEnum::CURRENT_PAGE,
