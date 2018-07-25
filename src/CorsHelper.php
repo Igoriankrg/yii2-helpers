@@ -39,7 +39,7 @@ class CorsHelper {
 		];
 	}
 	
-	public static function generateOriginFromEnvUrls() {
+	private static function generateOriginFromEnvUrls() {
 		$origin = [];
 		$urls = env('url');
 		foreach($urls as $url) {
