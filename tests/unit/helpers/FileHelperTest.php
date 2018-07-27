@@ -1,7 +1,7 @@
 <?php
 namespace tests\unit\helpers;
 
-use Codeception\Test\Unit;
+use yii2lab\test\Test\Unit;
 use yii2lab\helpers\yii\FileHelper;
 
 class FileHelperTest extends Unit
