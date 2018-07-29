@@ -2,6 +2,7 @@
 
 namespace yii2lab\helpers;
 
+use yii\base\InvalidArgumentException;
 use yii\helpers\ArrayHelper;
 use yii2lab\domain\BaseEntity;
 use yii2lab\domain\values\BaseValue;
@@ -112,11 +113,17 @@ class TypeHelper {
 	}
 	
 	private function typeInteger($value, $param) {
+		if(!is_numeric($value) && !is_integer($value)) {
+			throw new InvalidArgumentException('Value "' . $value . '" not integer!');
+		}
 		$value = intval($value);
 		return $value;
 	}
 	
 	private function typeFloat($value, $param) {
+		if(!is_numeric($value) && !is_float($value)) {
+			throw new InvalidArgumentException('Value "' . $value . '" not float!');
+		}
 		$value = floatval($value);
 		return $value;
 	}
