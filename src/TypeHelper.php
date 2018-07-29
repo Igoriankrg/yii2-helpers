@@ -2,9 +2,9 @@
 
 namespace yii2lab\helpers;
 
-use yii\base\InvalidArgumentException;
 use yii\helpers\ArrayHelper;
 use yii2lab\domain\BaseEntity;
+use yii2lab\domain\helpers\types\BaseType;
 use yii2lab\domain\values\BaseValue;
 use yii2lab\domain\values\TimeValue;
 
@@ -16,7 +16,7 @@ class TypeHelper {
 	const BOOLEAN = 'boolean';
 	const NULL = 'null';
 	
-	private static $instance;
+	private static $_instanceTypes = [];
 	
 	private static function decodeValueObject($value) {
 		if($value instanceof TimeValue) {
@@ -84,17 +84,12 @@ class TypeHelper {
 	}
 	
 	public static function encode($value, $typeStr) {
-		$arr = explode(':', $typeStr);
-		$param = null;
-		if(count($arr) > 1) {
-			list($type, $param) = $arr;
-		} else {
-			list($type) = $arr;
-		}
-		$instance = self::getInstance();
-		$method = 'type' . ucfirst($type);
-		if(method_exists($instance, $method)) {
-			$value = $instance->$method($value, $param);
+		list($type, $param) = self::parseType($typeStr);
+		/** @var BaseType $instanceType */
+		$instanceType = self::getInstanceType($type);
+		if($instanceType) {
+			$instanceType->validate($value, $param);
+			$value = $instanceType->normalizeValue($value, $param);
 		} elseif(function_exists($type)) {
 			if(isset($param)) {
 				$value = $type($value, $param);
@@ -105,44 +100,26 @@ class TypeHelper {
 		return $value;
 	}
 	
-	private static function getInstance() {
-		if(empty(self::$instance)) {
-			self::$instance = new static;
+	private static function parseType($typeStr) {
+		$arr = explode(':', $typeStr);
+		$param = null;
+		if(count($arr) > 1) {
+			list($type, $param) = $arr;
+		} else {
+			list($type) = $arr;
 		}
-		return self::$instance;
+		return [$type, $param];
 	}
 	
-	private function typeInteger($value, $param) {
-		if(!is_numeric($value) && !is_integer($value)) {
-			throw new InvalidArgumentException('Value "' . $value . '" not integer!');
+	public static function getInstanceType($class) {
+		$class = 'yii2lab\domain\helpers\types\\' . ucfirst($class) . 'Type';
+		if(!class_exists($class)) {
+			return null;
 		}
-		$value = intval($value);
-		return $value;
-	}
-	
-	private function typeFloat($value, $param) {
-		if(!is_numeric($value) && !is_float($value)) {
-			throw new InvalidArgumentException('Value "' . $value . '" not float!');
+		if(!array_key_exists($class, self::$_instanceTypes)) {
+			self::$_instanceTypes[$class] = new $class;
 		}
-		$value = floatval($value);
-		return $value;
-	}
-	
-	private function typeString($value, $param) {
-		$value = strval($value);
-		return $value;
-	}
-	
-	private function typeBoolean($value, $param) {
-		$value = !empty($value);
-		return $value;
-	}
-	
-	private function typeNull($value, $param) {
-		if(empty($value)) {
-			$value = null;
-		}
-		return $value;
+		return self::$_instanceTypes[$class];
 	}
 	
 }
