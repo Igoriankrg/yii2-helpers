@@ -3,6 +3,7 @@
 namespace yii2lab\helpers;
 
 use Yii;
+use yii2lab\app\domain\helpers\EnvService;
 use yii2lab\helpers\yii\FileHelper;
 
 class Helper {
@@ -58,8 +59,7 @@ class Helper {
 	}
 	
 	static function getCurrentDbDriver() {
-		$dsn = config("components.db.dsn");
-		$driver = explode(':', $dsn)[0];
+        $driver = EnvService::getConnection('main.driver');
 		return  $driver;
 	}
 
