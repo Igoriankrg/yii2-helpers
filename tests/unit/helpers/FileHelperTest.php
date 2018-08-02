@@ -11,11 +11,11 @@ class FileHelperTest extends Unit
 	{
 		$fileName = VENDOR_DIR . DS . 'yii2lab/yii2-helpers/tests/store/exists.file';
 		$ext = FileHelper::fileExt($fileName);
-		expect($ext)->equals('file');
+		$this->tester->assertEquals($ext, 'file');
 		
 		$fileName = VENDOR_DIR . DS . 'yii2lab/yii2-helpers/tests/store/exists';
 		$ext = FileHelper::fileExt($fileName);
-		expect($ext)->equals(null);
+		$this->tester->assertEquals($ext, null);
 	}
 	
 	public function testFileRemoveExt()
@@ -23,23 +23,23 @@ class FileHelperTest extends Unit
 		$fileNameWithExt = VENDOR_DIR . DS . 'yii2lab/yii2-helpers/tests/store/exists.file';
 		$fileNameWithOutExt = VENDOR_DIR . DS . 'yii2lab/yii2-helpers/tests/store/exists';
 		$ext = FileHelper::fileRemoveExt($fileNameWithExt);
-		expect($ext)->equals($fileNameWithOutExt);
+		$this->tester->assertEquals($ext, $fileNameWithOutExt);
 		
 		$ext = FileHelper::fileRemoveExt($fileNameWithOutExt);
-		expect($ext)->equals($fileNameWithOutExt);
+		$this->tester->assertEquals($ext, $fileNameWithOutExt);
 		
 		$ext = FileHelper::fileRemoveExt('index.php');
-		expect($ext)->equals('index');
+		$this->tester->assertEquals($ext, 'index');
 	}
 	
 	public function testLoadData()
 	{
 		$fileName = VENDOR_DIR . DS . 'yii2lab/yii2-helpers/tests/store/data/main.php';
 		$result = FileHelper::loadData($fileName, 'aliases.@npm');
-		expect($result)->equals('@vendor/npm-asset');
+		$this->tester->assertEquals($result, '@vendor/npm-asset');
 		
 		$result = FileHelper::loadData($fileName);
-		expect($result)->equals([
+		$this->tester->assertEquals($result, [
 			'bootstrap' => ['log', 'language', 'queue'],
 			'timeZone' => 'UTC',
 			'aliases' => [
@@ -55,15 +55,15 @@ class FileHelperTest extends Unit
 		
 		$fileName = 'common/data\user.php';
 		$result = FileHelper::getPath($fileName);
-		expect($result)->equals($expected);
+		$this->tester->assertEquals($result, $expected);
 		
 		$fileName = '@common/data\user.php';
 		$result = FileHelper::getPath($fileName);
-		expect($result)->equals($expected);
+		$this->tester->assertEquals($result, $expected);
 		
 		$fileName = ROOT_DIR . DS . 'common' . DS . 'data' . DS . 'user.php';
 		$result = FileHelper::getPath($fileName);
-		expect($result)->equals($expected);
+		$this->tester->assertEquals($result, $expected);
 	}
 	
 	public function testDirLevelUp()
@@ -71,25 +71,25 @@ class FileHelperTest extends Unit
 		$path = ROOT_DIR . DS . 'common' . DS . 'data' . DS . 'user.php';
 		
 		$result = FileHelper::dirLevelUp($path, 0);
-		expect($result)->equals($path);
+		$this->tester->assertEquals($result, $path);
 		
 		$result = FileHelper::dirLevelUp($path,1);
-		expect($result)->equals(ROOT_DIR . DS . 'common' . DS . 'data');
+		$this->tester->assertEquals($result, ROOT_DIR . DS . 'common' . DS . 'data');
 		
 		$result = FileHelper::dirLevelUp($path,2);
-		expect($result)->equals(ROOT_DIR . DS . 'common');
+		$this->tester->assertEquals($result, ROOT_DIR . DS . 'common');
 		
 		$result = FileHelper::dirLevelUp($path,3);
-		expect($result)->equals(ROOT_DIR);
+		$this->tester->assertEquals($result, ROOT_DIR);
 	}
 	
 	public function testNormalizeAlias()
 	{
 		$result = FileHelper::normalizeAlias('@common/data\rbac');
-		expect($result)->equals('@common/data/rbac');
+		$this->tester->assertEquals($result, '@common/data/rbac');
 		
 		$result = FileHelper::normalizeAlias('common/data\rbac');
-		expect($result)->equals('@common/data/rbac');
+		$this->tester->assertEquals($result, '@common/data/rbac');
 	}
 	
 	public function testPathToAbsolute()
@@ -97,22 +97,22 @@ class FileHelperTest extends Unit
 		$path = ROOT_DIR . DS . 'common' . DS . 'data' . DS . 'user.php';
 		
 		$result = FileHelper::pathToAbsolute($path);
-		expect($result)->equals($path);
+		$this->tester->assertEquals($result, $path);
 		
 		$result = FileHelper::pathToAbsolute('common' . DS . 'data' . DS . 'user.php');
-		expect($result)->equals($path);
+		$this->tester->assertEquals($result, $path);
 	}
 	
 	public function testIsAlias()
 	{
 		$result = FileHelper::isAlias(ROOT_DIR . DS . 'common' . DS . 'data' . DS . 'user.php');
-		expect($result)->false();
+		$this->tester->assertFalse($result);
 		
 		$result = FileHelper::isAlias('common' . DS . 'data' . DS . 'user.php');
-		expect($result)->false();
+		$this->tester->assertFalse($result);
 		
 		$result = FileHelper::isAlias('@common/data\rbac');
-		expect($result)->true();
+		$this->tester->assertTrue($result);
 	}
 	
 	public function testGetAlias()
@@ -120,13 +120,13 @@ class FileHelperTest extends Unit
 		$path = ROOT_DIR . DS . 'common' . DS . 'data' . DS . 'user.php';
 		
 		$result = FileHelper::getAlias($path);
-		expect($result)->equals($path);
+		$this->tester->assertEquals($result, $path);
 		
 		$result = FileHelper::getAlias('common' . DS . 'data' . DS . 'user.php');
-		expect($result)->equals($path);
+		$this->tester->assertEquals($result, $path);
 		
 		$result = FileHelper::getAlias('@common/data\user.php');
-		expect($result)->equals($path);
+		$this->tester->assertEquals($result, $path);
 	}
 	
 	public function testFindInFileByExp()
@@ -138,7 +138,7 @@ class FileHelperTest extends Unit
 		];
 		
 		$result = FileHelper::findInFileByExp($fileName, '[a-z]+-asset');
-		expect($result)->equals([[$expected]]);
+		$this->tester->assertEquals($result, [[$expected]]);
 	}
 	
 	public function testRemove()
@@ -151,20 +151,20 @@ class FileHelperTest extends Unit
 		file_put_contents($fileName, '');
 		
 		$result = FileHelper::remove($fileName);
-		expect($result)->true();
-		expect(file_exists($fileName))->false();
+		$this->tester->assertTrue($result);
+		$this->tester->assertFalse(file_exists($fileName));
 		
 		$result = FileHelper::remove($dirName);
-		expect($result)->true();
-		expect(is_dir($dirName))->false();
+		$this->tester->assertTrue($result);
+		$this->tester->assertFalse(is_dir($dirName));
 		
 		// not existed
 		
 		$result = FileHelper::remove($fileName . '_fake');
-		expect($result)->false();
+		$this->tester->assertFalse($result);
 		
 		$result = FileHelper::remove($dirName . '_fake');
-		expect($result)->false();
+		$this->tester->assertFalse($result);
 	}
 	
 	public function testIsAbsolute()
@@ -172,10 +172,10 @@ class FileHelperTest extends Unit
 		$fileName = 'yii2lab/yii2-helpers/tests/store/exists.file';
 		
 		$result = FileHelper::isAbsolute($fileName);
-		expect($result)->false();
+		$this->tester->assertFalse($result);
 		
 		$result = FileHelper::isAbsolute(VENDOR_DIR . DS . $fileName);
-		expect($result)->true();
+		$this->tester->assertTrue($result);
 	}
 	
 	public function testRootPath()
@@ -189,10 +189,10 @@ class FileHelperTest extends Unit
 		$fileName = 'vendor/yii2lab/yii2-helpers/tests/store/exists.file';
 		
 		$result = FileHelper::trimRootPath(ROOT_DIR . DS . $fileName);
-		expect($result)->equals($fileName);
+		$this->tester->assertEquals($result, $fileName);
 		
 		$result = FileHelper::trimRootPath($fileName);
-		expect($result)->equals($fileName);
+		$this->tester->assertEquals($result, $fileName);
 	}
 	
 	public function testUp()
@@ -200,16 +200,16 @@ class FileHelperTest extends Unit
 		$path = ROOT_DIR . DS . 'common' . DS . 'data' . DS . 'user.php';
 		
 		$result = FileHelper::up($path, 0);
-		expect($result)->equals($path);
+		$this->tester->assertEquals($result, $path);
 		
 		$result = FileHelper::up($path,1);
-		expect($result)->equals(ROOT_DIR . DS . 'common' . DS . 'data');
+		$this->tester->assertEquals($result, ROOT_DIR . DS . 'common' . DS . 'data');
 		
 		$result = FileHelper::up($path,2);
-		expect($result)->equals(ROOT_DIR . DS . 'common');
+		$this->tester->assertEquals($result, ROOT_DIR . DS . 'common');
 		
 		$result = FileHelper::up($path,3);
-		expect($result)->equals(ROOT_DIR);
+		$this->tester->assertEquals($result, ROOT_DIR);
 	}
 	
 	public function testIsEqualContent()
@@ -218,10 +218,10 @@ class FileHelperTest extends Unit
 		$fileName2 = ROOT_DIR . DS . 'vendor/yii2lab/yii2-helpers/tests/store/exists2.file';
 		
 		$result = FileHelper::isEqualContent($fileName, $fileName);
-		expect($result)->true();
+		$this->tester->assertTrue($result);
 		
 		$result = FileHelper::isEqualContent($fileName, $fileName2);
-		expect($result)->false();
+		$this->tester->assertFalse($result);
 	}
 	
 	public function testCopy()
@@ -232,7 +232,7 @@ class FileHelperTest extends Unit
 		FileHelper::remove($fileName2);
 		FileHelper::copy($fileName, $fileName2);
 		$result = FileHelper::isEqualContent($fileName, $fileName2);
-		expect($result)->true();
+		$this->tester->assertTrue($result);
 	}
 	
 	public function testSave()
@@ -242,7 +242,7 @@ class FileHelperTest extends Unit
 		FileHelper::remove($fileName2);
 		FileHelper::save($fileName2, 'hgfd');
 		$result = file_get_contents($fileName2);
-		expect($result)->equals('hgfd');
+		$this->tester->assertEquals($result, 'hgfd');
 	}
 	
 	public function testLoad()
@@ -251,7 +251,7 @@ class FileHelperTest extends Unit
 		
 		$result = FileHelper::load($fileName);
 		$expected = file_get_contents($fileName);
-		expect($result)->equals($expected);
+		$this->tester->assertEquals($result, $expected);
 	}
 	
 	public function testHas()
@@ -259,12 +259,11 @@ class FileHelperTest extends Unit
 		$fileName = ROOT_DIR . DS . 'vendor/yii2lab/yii2-helpers/tests/store/exists.file';
 		
 		$result = FileHelper::has($fileName);
-		expect($result)->true();
+		$this->tester->assertTrue($result);
 		
 		$result = FileHelper::has($fileName . '_fake');
-		expect($result)->false();
+		$this->tester->assertFalse($result);
 	}
-	
 	
 	public function testNormalizePathList()
 	{
@@ -273,7 +272,7 @@ class FileHelperTest extends Unit
 		];
 		
 		$result = FileHelper::normalizePathList($pathList);
-		expect($result)->equals([
+		expect($result, [
 			'\ggg\\rrr',
 		]);
 	}
@@ -281,7 +280,7 @@ class FileHelperTest extends Unit
 	public function testScanDir()
 	{
 		$result = FileHelper::scanDir(ROOT_DIR . DS . 'vendor/yii2lab/yii2-helpers/tests/_application/common/config');
-		expect($result)->equals([
+		$this->tester->assertEquals($result, [
 			'bootstrap.php',
 			'domains.php',
 			'env-local.php',
@@ -294,49 +293,49 @@ class FileHelperTest extends Unit
 	public function testDirFromTime()
 	{
 		$result = FileHelper::dirFromTime(1, 1521444057);
-		expect($result)->equals('2018');
+		$this->tester->assertEquals($result, '2018');
 		
 		$result = FileHelper::dirFromTime(2, 1521444057);
-		expect($result)->equals('2018\03');
+		$this->tester->assertEquals($result, '2018\03');
 		
 		$result = FileHelper::dirFromTime(3, 1521444057);
-		expect($result)->equals('2018\03\19');
+		$this->tester->assertEquals($result, '2018\03\19');
 		
 		$result = FileHelper::dirFromTime(4, 1521444057);
-		expect($result)->equals('2018\03\19\07');
+		$this->tester->assertEquals($result, '2018\03\19\07');
 		
 		$result = FileHelper::dirFromTime(5, 1521444057);
-		expect($result)->equals('2018\03\19\07\20');
+		$this->tester->assertEquals($result, '2018\03\19\07\20');
 		
 		$result = FileHelper::dirFromTime(6, 1521444057);
-		expect($result)->equals('2018\03\19\07\20\57');
+		$this->tester->assertEquals($result, '2018\03\19\07\20\57');
 	}
 	
 	public function testFileFromTime()
 	{
 		$result = FileHelper::fileFromTime(1, 1521444057);
-		expect($result)->equals('2018');
+		$this->tester->assertEquals($result, '2018');
 		
 		$result = FileHelper::fileFromTime(2, 1521444057);
-		expect($result)->equals('2018.03');
+		$this->tester->assertEquals($result, '2018.03');
 		
 		$result = FileHelper::fileFromTime(3, 1521444057);
-		expect($result)->equals('2018.03.19');
+		$this->tester->assertEquals($result, '2018.03.19');
 		
 		$result = FileHelper::fileFromTime(4, 1521444057);
-		expect($result)->equals('2018.03.19_07');
+		$this->tester->assertEquals($result, '2018.03.19_07');
 		
 		$result = FileHelper::fileFromTime(5, 1521444057);
-		expect($result)->equals('2018.03.19_07.20');
+		$this->tester->assertEquals($result, '2018.03.19_07.20');
 		
 		$result = FileHelper::fileFromTime(6, 1521444057);
-		expect($result)->equals('2018.03.19_07.20.57');
+		$this->tester->assertEquals($result, '2018.03.19_07.20.57');
 	}
 	
 	public function testFindFilesWithPath()
 	{
 		$result = FileHelper::findFilesWithPath(ROOT_DIR . DS . 'vendor/yii2lab/yii2-helpers/tests/_application');
-		expect($result)->equals([
+		$this->tester->assertEquals($result, [
 			'common\config\bootstrap.php',
 			'common\config\domains.php',
 			'common\config\env-local.php',
