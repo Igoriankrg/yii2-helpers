@@ -23,7 +23,13 @@ class ClassHelper {
         $lastSlash = strrpos($class, '\\');
         return substr($class, 0, $lastSlash);
     }
-
+	
+	public static function getClassOfClassName($class) {
+		$lastPos = strrpos($class, '\\');
+		$name = substr($class, $lastPos + 1);
+		return $name;
+	}
+    
     public static function extractNameFromClass($class, $type) {
         $lastPos = strrpos($class, '\\');
         $name = substr($class, $lastPos + 1, 0 - strlen($type));

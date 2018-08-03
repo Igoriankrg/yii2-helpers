@@ -57,7 +57,7 @@ class FileHelper extends BaseFileHelper
 		for($i = 0; $i < $upLevel; $i++) {
 			$arr = array_splice($arr, 0, -1);
 		}
-		return implode('\\', $arr);
+		return implode(DS, $arr);
 	}
 	
 	public static function normalizeAlias($path) {

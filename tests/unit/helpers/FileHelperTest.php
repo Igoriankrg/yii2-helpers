@@ -336,11 +336,11 @@ class FileHelperTest extends Unit
 	{
 		$result = FileHelper::findFilesWithPath(ROOT_DIR . DS . 'vendor/yii2lab/yii2-helpers/tests/_application');
 		$this->tester->assertEquals($result, [
-			'common\config\bootstrap.php',
-			'common\config\domains.php',
-			'common\config\env-local.php',
-			'common\config\env.php',
-			'common\config\main.php',
+			'common' . DS . 'config' . DS . 'bootstrap.php',
+			'common' . DS . 'config' . DS . 'domains.php',
+			'common' . DS . 'config' . DS . 'env-local.php',
+			'common' . DS . 'config' . DS . 'env.php',
+			'common' . DS . 'config' . DS . 'main.php',
 		]);
 	}
 	
