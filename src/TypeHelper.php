@@ -5,7 +5,7 @@ namespace yii2lab\helpers;
 use yii\helpers\ArrayHelper;
 use yii2lab\domain\BaseEntity;
 use yii2lab\domain\helpers\types\BaseType;
-use yii2lab\domain\values\BaseValue;
+use yii2lab\domain\interfaces\ValueObjectInterface;
 use yii2lab\domain\values\TimeValue;
 
 class TypeHelper {
@@ -21,7 +21,7 @@ class TypeHelper {
 	private static function decodeValueObject($value) {
 		if($value instanceof TimeValue) {
 			$value = $value->getInFormat(TimeValue::FORMAT_API);
-		} elseif($value instanceof BaseValue) {
+		} elseif($value instanceof ValueObjectInterface) {
 			$value = $value->get();
 		}
 		return $value;
@@ -36,7 +36,7 @@ class TypeHelper {
 			$item = ArrayHelper::toArray($entity);
 		}
 		foreach($item as $fieldName => $value) {
-			if($value instanceof BaseValue) {
+			if($value instanceof ValueObjectInterface) {
 				$item[ $fieldName ] = self::decodeValueObject($value);
 			}
 			$pureValue = ArrayHelper::getValue($entity, $fieldName);
