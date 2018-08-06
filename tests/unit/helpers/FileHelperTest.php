@@ -335,7 +335,7 @@ class FileHelperTest extends Unit
 	public function testFindFilesWithPath()
 	{
 		$result = FileHelper::findFilesWithPath(ROOT_DIR . DS . 'vendor/yii2lab/yii2-helpers/tests/_application');
-		$this->tester->assertEquals($result, [
+		$this->tester->assertArraySubset($result, [
 			'common' . DS . 'config' . DS . 'bootstrap.php',
 			'common' . DS . 'config' . DS . 'domains.php',
 			'common' . DS . 'config' . DS . 'env-local.php',
