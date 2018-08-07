@@ -240,7 +240,7 @@ class FileHelper extends BaseFileHelper
 			return false;
 		}
 		if($fp = @opendir($source_dir)) {
-			$filedata	= array();
+			$fileList	= [];
 			$new_depth	= $directory_depth - 1;
 			$source_dir	= rtrim($source_dir, DS).DS;
 			while(FALSE !== ($file = readdir($fp))) {
@@ -253,23 +253,24 @@ class FileHelper extends BaseFileHelper
 				if(($directory_depth < 1 OR $new_depth > 0) && @is_dir($source_dir.$file)) {
 					$dir_cont = self::findFilesWithPath($source_dir.$file.DS, $new_depth, $hidden, $empty_dir);
 					if(!empty($dir_cont)) {
-						$filedata = array_merge($filedata,$dir_cont);
+						$fileList = array_merge($fileList,$dir_cont);
 					} else {
 						if($empty_dir) {
-							$filedata[] = $dd.$file.DS;
+							$fileList[] = $dd.$file.DS;
 						}
 					}
 				} else {
 					
 					if(@is_dir($source_dir.$file)) {
-						$filedata[] = $dd.$file;
+						$fileList[] = $dd.$file;
 					} else {
-						$filedata[] = $dd.$file;
+						$fileList[] = $dd.$file;
 					}
 				}
 			}
 			closedir($fp);
-			return $filedata;
+			sort($fileList);
+			return $fileList;
 		}
 		return FALSE;
 	}
