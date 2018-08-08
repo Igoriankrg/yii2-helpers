@@ -296,19 +296,19 @@ class FileHelperTest extends Unit
 		$this->tester->assertEquals($result, '2018');
 		
 		$result = FileHelper::dirFromTime(2, 1521444057);
-		$this->tester->assertEquals($result, '2018\03');
+		$this->tester->assertEquals($result, '2018' . DS . '03');
 		
 		$result = FileHelper::dirFromTime(3, 1521444057);
-		$this->tester->assertEquals($result, '2018\03\19');
+		$this->tester->assertEquals($result, '2018' . DS . '03' . DS . '19');
 		
 		$result = FileHelper::dirFromTime(4, 1521444057);
-		$this->tester->assertEquals($result, '2018\03\19\07');
+		$this->tester->assertEquals($result, '2018' . DS . '03' . DS . '19' . DS . '07');
 		
 		$result = FileHelper::dirFromTime(5, 1521444057);
-		$this->tester->assertEquals($result, '2018\03\19\07\20');
+		$this->tester->assertEquals($result, '2018' . DS . '03' . DS . '19' . DS . '07' . DS . '20');
 		
 		$result = FileHelper::dirFromTime(6, 1521444057);
-		$this->tester->assertEquals($result, '2018\03\19\07\20\57');
+		$this->tester->assertEquals($result, '2018' . DS . '03' . DS . '19' . DS . '07' . DS . '20' . DS . '57');
 	}
 	
 	public function testFileFromTime()
