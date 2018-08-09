@@ -3,6 +3,7 @@
 namespace yii2lab\helpers;
 
 use Yii;
+use yii\helpers\Url;
 use yii2lab\helpers\yii\FileHelper;
 use yii2lab\helpers\yii\Html;
 
@@ -42,4 +43,16 @@ class Page {
 		return Yii::$app->view->renderFile($fileName, $vars);
 	}
 
+	public static function favicon($icoName = null) {
+		if(empty($icoName)) {
+			return null;
+		}
+		$url = Url::to([SL . $icoName]);
+		Yii::$app->view->registerLinkTag([
+			'rel' => 'icon',
+			'type' => FileHelper::getMimeTypeByExtension($icoName),
+			'href' => $url,
+		]);
+    }
+	
 }
