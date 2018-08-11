@@ -6,13 +6,19 @@ use InvalidArgumentException;
 use Yii;
 use yii2lab\domain\data\GetParams;
 use xj\ua\UserAgent;
+use yii\web\View;
 
 class ClientHelper
 {
 
 	const IP_HEADER_KEY = 'ip_address';
 	const LOCALHOST_IP = '127.0.0.1';
-	
+
+    public static function setLocalStorage($key, $value) {
+        $jsCode = 'localStorage.setItem("' . $key . '", ' . json_encode($value) . ');';
+        Yii::$app->view->registerJs($jsCode, View::POS_READY);
+    }
+
 	public static function getAgentInfo($isLowerCase = false) {
 		try {
 			$userAgent = UserAgent::model();
