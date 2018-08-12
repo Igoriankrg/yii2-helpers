@@ -20,6 +20,7 @@ class Behavior {
 		if(!empty($only)) {
 			$config['only'] = ArrayHelper::toArray($only);
 		}
+        $config['except'] = ['options'];
 		return $config;
 	}
 	

@@ -15,8 +15,12 @@ class ClientHelper
 	const LOCALHOST_IP = '127.0.0.1';
 
     public static function setLocalStorage($key, $value) {
-        $jsCode = 'localStorage.setItem("' . $key . '", ' . json_encode($value) . ');';
-        Yii::$app->view->registerJs($jsCode, View::POS_READY);
+        $code = 'localStorage.setItem("' . $key . '", ' . json_encode($value) . ');';
+        self::runJavasriptCode($code);
+    }
+
+    public static function runJavasriptCode($code, $pos = View::POS_READY) {
+        Yii::$app->view->registerJs($code, $pos);
     }
 
 	public static function getAgentInfo($isLowerCase = false) {
