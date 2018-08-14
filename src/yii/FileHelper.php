@@ -188,15 +188,30 @@ class FileHelper extends BaseFileHelper
 	    if(!self::has($dir)) {
 	        return [];
         }
-		$pathes = scandir($dir);
-		ArrayHelper::removeByValue('.', $pathes);
-		ArrayHelper::removeByValue('..', $pathes);
-		if(empty($pathes)) {
+		$pathList = scandir($dir);
+		ArrayHelper::removeByValue('.', $pathList);
+		ArrayHelper::removeByValue('..', $pathList);
+		if(empty($pathList)) {
 			return [];
 		}
+		if(!empty($options)) {
+			$pathList = self::filterPathList($pathList, $options, $dir);
+		}
+		return $pathList;
+	}
+	
+	public static function filterPathList($pathList, $options, $basePath = null) {
+		if(empty($pathList)) {
+			return $pathList;
+		}
 		$result = [];
-		//$options = self::normalizeOptions($options);
-		foreach($pathes as $path) {
+		if(!empty($options)) {
+			if(!isset($options['basePath']) && !empty($basePath)) {
+				$options['basePath'] = realpath($basePath);
+			}
+		}
+		$options = self::normalizeOptions($options);
+    	foreach($pathList as $path) {
 			if (static::filterPath($path, $options)) {
 				$result[] = $path;
 			}
