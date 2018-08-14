@@ -197,6 +197,7 @@ class FileHelper extends BaseFileHelper
 		if(!empty($options)) {
 			$pathList = self::filterPathList($pathList, $options, $dir);
 		}
+		sort($pathList);
 		return $pathList;
 	}
 	
