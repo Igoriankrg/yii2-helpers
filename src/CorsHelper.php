@@ -9,13 +9,13 @@ use yii2lab\misc\enums\HttpMethodEnum;
 class CorsHelper {
 	
 	public static function generate($origin = null) {
-		if(empty($origin)) {
+		/*if(empty($origin)) {
 			$origin = self::generateOriginFromEnvUrls();
-		}
+		}*/
 		return [
 			'class' => Cors::class,
 			'cors' => [
-				'Origin' => $origin,
+				'Origin' => ['*'],
 				'Access-Control-Request-Method' => [HttpMethodEnum::values()],
 				'Access-Control-Request-Headers' => [
 					HttpHeaderEnum::CONTENT_TYPE,
