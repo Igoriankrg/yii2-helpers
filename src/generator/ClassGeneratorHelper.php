@@ -10,7 +10,7 @@ class ClassGeneratorHelper {
 	public static function toConstName($name) {
 		$constName = $name;
 		$constName = Inflector::camel2id($constName);
-		$constName = str_replace(['.','-'], '_', $constName);
+		$constName = preg_replace('#([^a-z0-9]+)#i', '_', $constName);
 		$constName = str_replace('__', '_', $constName);
 		$constName = strtoupper($constName);
 		return $constName;
