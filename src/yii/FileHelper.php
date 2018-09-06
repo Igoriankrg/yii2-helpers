@@ -14,7 +14,9 @@ class FileHelper extends BaseFileHelper
     	$baseName = basename($name);
         $start = strrpos($baseName, DOT);
         if($start) {
-	        return substr($baseName, $start + 1);
+        	$ext = substr($baseName, $start + 1);
+	        $ext = strtolower($ext);
+	        return $ext;
         }
         return null;
     }
