@@ -8,6 +8,24 @@ use yii2lab\helpers\yii\FileHelper;
 
 class Helper {
 	
+	public static function parseParams($path, $delimiter, $subDelimiter) {
+		$isHasParams = strpos($path, $delimiter);
+		if(!$isHasParams) {
+			return null;
+		}
+		$params = [];
+		$segments = explode($delimiter, $path);
+		foreach($segments as $segment) {
+			$s = explode($subDelimiter, $segment);
+			if(count($s) > 1) {
+				$params[$s[0]] = $s[1];
+			} else {
+				$params[] = $s[0];
+			}
+		}
+		return $params;
+	}
+	
 	public static function getNotEmptyValue() {
 		$args = func_get_args();
 		foreach($args as $arg) {
