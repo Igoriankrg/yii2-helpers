@@ -3,8 +3,8 @@
 namespace yii2lab\helpers;
 
 use yii\filters\Cors;
-use yii2lab\misc\enums\HttpHeaderEnum;
-use yii2lab\misc\enums\HttpMethodEnum;
+use yii2lab\extension\web\enums\HttpHeaderEnum;
+use yii2lab\extension\web\enums\HttpMethodEnum;
 
 class CorsHelper {
 	

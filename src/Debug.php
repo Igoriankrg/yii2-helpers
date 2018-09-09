@@ -7,7 +7,7 @@ use yii2lab\helpers\yii\ArrayHelper;
 use yii\bootstrap\BootstrapAsset;
 use yii2lab\helpers\yii\FileHelper;
 use yii2lab\helpers\yii\Html;
-use yii2lab\store\Store;
+use yii2lab\extension\store\Store;
 
 class Debug {
 	

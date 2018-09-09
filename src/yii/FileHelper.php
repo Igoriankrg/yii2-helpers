@@ -4,7 +4,7 @@ namespace yii2lab\helpers\yii;
 
 use Yii;
 use yii\helpers\BaseFileHelper;
-use yii2lab\store\Store;
+use yii2lab\extension\store\Store;
 
 class FileHelper extends BaseFileHelper
 {
