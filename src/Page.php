@@ -4,8 +4,8 @@ namespace yii2lab\helpers;
 
 use Yii;
 use yii\helpers\Url;
-use yii2lab\helpers\yii\FileHelper;
-use yii2lab\helpers\yii\Html;
+use yii2lab\extension\yii\helpers\FileHelper;
+use yii2lab\extension\yii\helpers\Html;
 
 class Page {
 	

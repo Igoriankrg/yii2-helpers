@@ -2,7 +2,7 @@
 
 namespace yii2lab\helpers;
 
-use yii2lab\helpers\yii\FileHelper;
+use yii2lab\extension\yii\helpers\FileHelper;
 
 class DataHelper {
 	

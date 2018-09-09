@@ -4,7 +4,7 @@ namespace yii2lab\helpers;
 
 use Yii;
 use yii\web\UploadedFile;
-use yii2lab\helpers\yii\FileHelper;
+use yii2lab\extension\yii\helpers\FileHelper;
 
 class TempHelper {
 	
