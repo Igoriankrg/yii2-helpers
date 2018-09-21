@@ -3,10 +3,19 @@
 namespace yii2lab\helpers;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii2lab\app\domain\helpers\EnvService;
 use yii2lab\extension\yii\helpers\FileHelper;
 
 class Helper {
+	
+	public static function list2tree($secureAttributes) {
+		$tree = [];
+		foreach($secureAttributes as $attribute) {
+			ArrayHelper::setValue($tree, $attribute, true);
+		}
+		return $tree;
+	}
 	
 	public static function parseParams($path, $delimiter, $subDelimiter) {
 		$isHasParams = strpos($path, $delimiter);
