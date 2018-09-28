@@ -5,12 +5,32 @@ namespace yii2lab\helpers;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii2module\account\domain\v2\filters\auth\ConsoleAuth;
 use yii2module\account\domain\v2\filters\auth\HttpTokenAuth;
 
 class Behavior {
 	
 	static function modifyActions() {
 		return ['create', 'update', 'delete'];
+	}
+	
+	static function auth($only = null) {
+		if(APP == CONSOLE) {
+			return self::consoleAuth($only);
+		}
+		if(APP == API) {
+			return self::apiAuth($only);
+		}
+	}
+	
+	static function consoleAuth($only = null) {
+		$config = [
+			'class' => ConsoleAuth::class,
+		];
+		if(!empty($only)) {
+			$config['only'] = ArrayHelper::toArray($only);
+		}
+		return $config;
 	}
 	
 	static function apiAuth($only = null) {
