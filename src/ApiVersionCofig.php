@@ -2,8 +2,6 @@
 
 namespace yii2lab\helpers;
 
-use yii\helpers\ArrayHelper;
-
 /**
  * Class ApiVersionCofig
  * @package yii2lab\helpers
