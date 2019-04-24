@@ -83,8 +83,6 @@ class ClientHelper
 	}
  
 	private static function isConsole() {
-		// todo: костыль
-		return true;
 		return APP == CONSOLE;
 	}
 }
